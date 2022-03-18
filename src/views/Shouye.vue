@@ -5,8 +5,8 @@
       <!-- 左侧两个 -->
       <el-col :span="6">
         <!-- 系统运行状态 -->
-        <LittleChart />
-        <LittleChart />
+        <LineChart myid="test1"/>
+        <Circle myid="test2"/>
       </el-col>
       <!-- 地图 -->
       <el-col :span="12">
@@ -14,27 +14,32 @@
       </el-col>
       <!-- 右边两列 -->
       <el-col :span="6">
-        <div class="little-holder"/>
-        <div class="little-holder"/>
+        <Pie myid="test3"/>
+        <LineChart myid="test4"/>
       </el-col>
       <!-- 下面的一行 -->
     </el-row>
     <el-row :gutter="20">
       <el-col :span="24">
-        <el-card shadow="hover" style="height: 220px"> </el-card>
+        <LineChart myid="test5"/>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import LittleChart from "../components/LittleChart.vue";
-import Map from "../components/map.vue";
+import LineChart from "../components/LineChart.vue";
+import Map from "../components/WorldMap.vue"
+import Pie from "../components/Pie.vue"
+import Circle from "../components/Circle.vue"
+
 export default {
   name: "shouye",
   components: {
-    LittleChart,
+    LineChart,
     Map,
+    Pie,
+    Circle,
   },
 };
 </script>
@@ -68,11 +73,5 @@ export default {
   width: 100%;
   margin-right: 6px;
 }
-.map-holder{
-   height: 453px;
-  border-radius: 5px;
-  background-color: #0d265e;
-  margin: 6px;
-  width: 100%;
-}
+
 </style>

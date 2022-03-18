@@ -1,5 +1,5 @@
 <template>
-  <div class="map-holder" id="map"></div>
+  <div :id="myid" class="pie-holder"></div>
 </template>
 
 <script>
@@ -8,19 +8,20 @@ import {
   onMounted,
   onUnmounted,
   onBeforeMount,
-  computed,
   watch,
-  nextTick,
+  computed,
   ref,
+  nextTick,
 } from "vue";
 import { inject } from "vue";
 import { useStore } from "vuex";
-
 export default {
-  name: "Map",
-  setup() {
+  name: "Pie",
+  props: ["myid"],
+  setup(props) {
     /// 声明接收一下echart,axios
     const store = useStore();
+    //获取折叠栏状态
     let collapse = ref(computed(() => store.state.collapse));
     let $echarts = inject("echarts");
     let $axios = inject("axios");
@@ -31,6 +32,7 @@ export default {
     let timeId = null;
 
     onMounted(() => {
+      //防止渲染时未挂载，虽然不知道为什么会出这个bug
       nextTick(() => {
         initChart();
         startInterval();
@@ -43,13 +45,13 @@ export default {
     });
     //初始化表格
     function initChart() {
-      chart = $echarts.init(document.getElementById("map"), "dark");
+      chart = $echarts.init(document.getElementById(props.myid), "dark");
       getdata().then(() => {
         console.log("onMounted", datas);
         chart.setOption({
           //标题配置
           title: {
-            text: "▎网页新增数量",
+            text: "▎网页分类",
             left: 10,
             top: 10,
           },
@@ -61,51 +63,38 @@ export default {
             bottom: "3%",
             containLabel: true, // 距离是包含坐标轴上的文字
           },
+          //图例的展示，通过name与series里对应
           legend: {
-            show: true,
+            // name:"数量",
+            show: false,
+            right: 10,
+            top: 10,
+            icon: "circle",
+            type:"scroll"
           },
-          xAxis: {
-            type: "category",
-            data: ["七月", "八月", "九月", "十月", "十一月", "十二月"],
-          },
-          yAxis: {
-            type: "value",
-          },
+
+          //鼠标在图上时的具体信息展示
           tooltip: {
-            trigger: "axis",
-            axisPointer: {
-              type: "line",
-              z: 0,
-              lineStyle: {
-                color: "#2D3443",
-              },
-            },
+            show: true,
+            trigger: 'item',
           },
           series: [
             {
-              type: "bar",
+              // name: "数量",
+              type: "pie",
+              legendHoverLink :true,
               label: {
                 show: true,
-                position: "top",
-                textStyle: {
-                  color: "white",
-                },
+                position: "inside",
+                color:"#fff"
               },
-              itemStyle: {
-                // 指明颜色渐变的方向
-                // 指明不同百分比之下颜色的值
-                color: new $echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                  // 百分之0状态之下的颜色值
-                  {
-                    offset: 0,
-                    color: "#5052EE",
-                  },
-                  // 百分之100状态之下的颜色值
-                  {
-                    offset: 1,
-                    color: "#AB6EE5",
-                  },
-                ]),
+              emphasis: {
+                label: {
+                  show: true,
+                },
+                labelLine: {
+                  show: false,
+                },
               },
             },
           ],
@@ -134,7 +123,7 @@ export default {
         .get("/api/testdata")
         .then(function (response) {
           datas = response.data.data.list.map((item) => {
-            return item.age;
+            return {value:item.age,name:item.name};
           });
         })
         .catch(function (error) {
@@ -148,7 +137,7 @@ export default {
       }
       timeId = setInterval(() => {
         update();
-      }, 500);
+      }, 5000);
     }
     //折叠栏更改时resize，注意time的设置
     watch(
@@ -167,11 +156,11 @@ export default {
 };
 </script>
 
-<style scoped lang="css">
-.map-holder {
-  height: 453px;
+<style>
+.pie-holder {
+  height: 224px;
   border-radius: 5px;
-  background-color: #0d265e;
+  background-color: #020f2e;
   margin: 6px;
   width: 100%;
 }

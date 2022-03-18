@@ -1,5 +1,5 @@
 <template>
-  <div class="little-holder" id="test"></div>
+  <div class="little-holder" :id="myid"></div>
 </template>
 
 <script>
@@ -16,8 +16,9 @@ import {
 import { inject } from "vue";
 import { useStore } from "vuex";
 export default {
-  name: "LittleChart",
-  setup() {
+  name: "LineChart",
+  props:['myid'],
+  setup(props) {
     /// 声明接收一下echart,axios
     const store = useStore();
     //获取折叠栏状态
@@ -45,7 +46,7 @@ export default {
     });
     //初始化表格
     function initChart() {
-      chart = $echarts.init(document.getElementById("test"), "dark");
+      chart = $echarts.init(document.getElementById(props.myid), "dark");
       getdata().then(() => {
         console.log("onMounted", datas);
         chart.setOption({
@@ -63,8 +64,12 @@ export default {
             bottom: "3%",
             containLabel: true, // 距离是包含坐标轴上的文字
           },
+          //图例的展示，通过name与series里对应
           legend: {
+            name:"数量",
             show: true,
+            right: 10,
+            top:10
           },
           xAxis: {
             type: "value",
@@ -73,6 +78,7 @@ export default {
             type: "category",
             data: ["七月", "八月", "九月", "十月", "十一月", "十二月"],
           },
+          //鼠标在图上时的具体信息展示
           tooltip: {
             trigger: "axis",
             axisPointer: {
@@ -85,6 +91,7 @@ export default {
           },
           series: [
             {
+              name:"数量",
               type: "bar",
               label: {
                 show: true,
