@@ -1,5 +1,5 @@
 <template>
-  <div class="little-holder" id="test"></div>
+  <div class="map-holder" id="map"></div>
 </template>
 
 <script>
@@ -8,19 +8,19 @@ import {
   onMounted,
   onUnmounted,
   onBeforeMount,
-  watch,
   computed,
+  watch,
+  nextTick,
   ref,
-  nextTick
 } from "vue";
 import { inject } from "vue";
 import { useStore } from "vuex";
+
 export default {
-  name: "LittleChart",
+  name: "Map",
   setup() {
     /// 声明接收一下echart,axios
     const store = useStore();
-    //获取折叠栏状态
     let collapse = ref(computed(() => store.state.collapse));
     let $echarts = inject("echarts");
     let $axios = inject("axios");
@@ -31,12 +31,10 @@ export default {
     let timeId = null;
 
     onMounted(() => {
-      //防止渲染时未挂载，虽然不知道为什么会出这个bug
-      nextTick(()=>{
+      nextTick(() => {
         initChart();
         startInterval();
-      })
-
+      });
     });
 
     onUnmounted(() => {
@@ -45,7 +43,7 @@ export default {
     });
     //初始化表格
     function initChart() {
-      chart = $echarts.init(document.getElementById("test"), "dark");
+      chart = $echarts.init(document.getElementById("map"), "dark");
       getdata().then(() => {
         console.log("onMounted", datas);
         chart.setOption({
@@ -67,11 +65,11 @@ export default {
             show: true,
           },
           xAxis: {
-            type: "value",
-          },
-          yAxis: {
             type: "category",
             data: ["七月", "八月", "九月", "十月", "十一月", "十二月"],
+          },
+          yAxis: {
+            type: "value",
           },
           tooltip: {
             trigger: "axis",
@@ -88,7 +86,7 @@ export default {
               type: "bar",
               label: {
                 show: true,
-                position: "right",
+                position: "top",
                 textStyle: {
                   color: "white",
                 },
@@ -169,9 +167,9 @@ export default {
 };
 </script>
 
-<style scoped   lang="css">
-.little-holder{
-  height: 224px;
+<style scoped lang="css">
+.map-holder {
+  height: 453px;
   border-radius: 5px;
   background-color: #0d265e;
   margin: 6px;

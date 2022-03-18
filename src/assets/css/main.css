@@ -47,7 +47,7 @@ a {
 
 .container {
     padding: 3px;
-    background: rgb(5, 1, 48);
+    /* background: rgb(5, 1, 48); */
     border: 1px solid #ddd;
     border-radius: 5px;
     margin: 0px;
