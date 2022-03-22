@@ -16,7 +16,7 @@ import {
 import { inject } from "vue";
 import { useStore } from "vuex";
 export default {
-  name: "Cirle",
+  name: "Circle",
   props: ["myid"],
   setup(props) {
     /// 声明接收一下echart,axios
@@ -30,13 +30,16 @@ export default {
     let chart = reactive(null);
     //定时器id
     let timeId = null;
-
     onMounted(() => {
       //防止渲染时未挂载，虽然不知道为什么会出这个bug
-      nextTick(() => {
-        initChart();
-        startInterval();
-      });
+      // nextTick(() => {
+      //   initChart();
+      //   update();
+      //   startInterval();
+      // });
+      initChart();
+      update();
+      startInterval();
     });
 
     onUnmounted(() => {
@@ -46,8 +49,18 @@ export default {
     //初始化表格
     function initChart() {
       chart = $echarts.init(document.getElementById(props.myid), "dark");
-      getdata().then(() => {
-        console.log("onMounted", datas);
+        const centerPointers = [
+          ["18%", "40%"],
+          ["50%", "40%"],
+          ["82%", "40%"],
+          ["18%", "75%"],
+          ["50%", "75%"],
+          ["82%", "75%"],
+        ];
+        const titleFontSize =
+          (document.getElementById(props.myid).offsetWidth / 100) * 3.6;
+        const innerRadius = titleFontSize * 2.8;
+        const outterRadius = innerRadius * 1.125;
         chart.setOption({
           //标题配置
           title: {
@@ -55,46 +68,89 @@ export default {
             left: 10,
             top: 10,
           },
-          //展示图的展示位置
-          grid: {
-            top: "20%",
-            left: "3%",
-            right: "6%",
-            bottom: "3%",
-            containLabel: true, // 距离是包含坐标轴上的文字
-          },
-          //图例的展示，通过name与series里对应
-          legend: {
-            // name:"数量",
-            show: false,
-            right: 10,
-            top: 10,
-            icon: "circle",
-            type:"scroll"
-          },
-
-          //鼠标在图上时的具体信息展示
-          tooltip: {
-            show: true,
-            trigger: 'item',
-          },
           series: [
             {
-              // name: "数量",
               type: "pie",
-              legendHoverLink :true,
+              center: centerPointers[0],
+              hoverAnimation: false,
+              radius: [outterRadius, innerRadius],
               label: {
                 show: true,
-                position: "inside",
-                color:"#fff"
+                position: "center",
+                fontSize: titleFontSize,
               },
-              emphasis: {
-                label: {
-                  show: true,
-                },
-                labelLine: {
-                  show: false,
-                },
+              labelLine: {
+                show: false,
+              },
+            },
+            {
+              type: "pie",
+              center: centerPointers[1],
+              hoverAnimation: false,
+              radius: [outterRadius, innerRadius],
+              label: {
+                show: true,
+                position: "center",
+                fontSize: titleFontSize,
+              },
+              labelLine: {
+                show: false,
+              },
+            },
+            {
+              type: "pie",
+              center: centerPointers[2],
+              hoverAnimation: false,
+              radius: [outterRadius, innerRadius],
+              label: {
+                show: true,
+                position: "center",
+                fontSize: titleFontSize,
+              },
+              labelLine: {
+                show: false,
+              },
+            },
+            {
+              type: "pie",
+              center: centerPointers[3],
+              hoverAnimation: false,
+              radius: [outterRadius, innerRadius],
+              label: {
+                show: true,
+                position: "center",
+                fontSize: titleFontSize,
+              },
+              labelLine: {
+                show: false,
+              },
+            },
+            {
+              type: "pie",
+              center: centerPointers[4],
+              hoverAnimation: false,
+              radius: [outterRadius, innerRadius],
+              label: {
+                show: true,
+                position: "center",
+                fontSize: titleFontSize,
+              },
+              labelLine: {
+                show: false,
+              },
+            },
+            {
+              type: "pie",
+              center: centerPointers[5],
+              hoverAnimation: false,
+              radius: [outterRadius, innerRadius],
+              label: {
+                show: true,
+                position: "center",
+                fontSize: titleFontSize,
+              },
+              labelLine: {
+                show: false,
               },
             },
           ],
@@ -103,19 +159,60 @@ export default {
           //自适应大小
           chart.resize();
         };
-      });
     }
     //获取并更新图表数据
     function update() {
-      getdata();
-      let dataOption = {
-        series: [
-          {
-            data: datas,
-          },
-        ],
-      };
-      chart.setOption(dataOption);
+      getdata().then(() => {
+        console.log("updated", datas);
+        const colorArrs = [
+          ["#4FF778", "#0BA82C"],
+          ["#E5DD45", "#E8B11C"],
+          ["#E8821C", "#E55445"],
+          ["#5052EE", "#AB6EE5"],
+          ["#23E5E5", "#2E72BF"],
+          ["#4FF778", "#0BA82C"],
+        ];
+
+        const seriesData = datas.map((item, index) => {
+          return {
+            label: {
+              position: "center",
+              color: colorArrs[index][1],
+              hoverAnimation: false,
+              show: true,
+            },
+            data: [
+              {
+                name: item.name + "\n\n" + item.value,
+                value: item.value,
+                itemStyle: {
+                  color: new $echarts.graphic.LinearGradient(0, 1, 0, 0, [
+                    {
+                      offset: 0,
+                      color: colorArrs[index][0],
+                    },
+                    {
+                      offset: 1,
+                      color: colorArrs[index][1],
+                    },
+                  ]),
+                },
+              },
+              {
+                // value: item.value,
+                itemStyle: {
+                  color: "#333843",
+                },
+              },
+            ],
+          };
+        });
+        // console.log(seriesData)
+        let dataOption = {
+          series: seriesData,
+        };
+        chart.setOption(dataOption);
+      });
     }
     //axios获取数据
     async function getdata() {
@@ -123,12 +220,13 @@ export default {
         .get("/api/testdata")
         .then(function (response) {
           datas = response.data.data.list.map((item) => {
-            return {value:item.age,name:item.name};
+            return { value: item.age, name: item.name };
           });
         })
         .catch(function (error) {
           console.log(error);
         });
+      // console.log("get里",datas)
     }
     //定时获取数据
     function startInterval() {
@@ -137,13 +235,14 @@ export default {
       }
       timeId = setInterval(() => {
         update();
-      }, 5000);
+        // console.log("定时器中",datas)
+      }, 3000);
     }
     //折叠栏更改时resize，注意time的设置
     watch(
       collapse,
       (newValue, oldValue) => {
-        console.log("折叠变化了", newValue, oldValue);
+        // console.log("折叠变化了", newValue, oldValue);
         setTimeout(() => {
           chart.resize();
         }, 300);

@@ -7,7 +7,7 @@ const result = {
     message: 'success',
     data: {
         'list|6': [{
-            'id': '@guid',
+            'id|+1': 1,
             'name': '@cname',
             'age|20-40': 20,
         }]

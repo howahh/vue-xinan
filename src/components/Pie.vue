@@ -35,6 +35,7 @@ export default {
       //防止渲染时未挂载，虽然不知道为什么会出这个bug
       nextTick(() => {
         initChart();
+        update();
         startInterval();
       });
     });
@@ -46,76 +47,76 @@ export default {
     //初始化表格
     function initChart() {
       chart = $echarts.init(document.getElementById(props.myid), "dark");
-      getdata().then(() => {
-        console.log("onMounted", datas);
-        chart.setOption({
-          //标题配置
-          title: {
-            text: "▎网页分类",
-            left: 10,
-            top: 10,
-          },
-          //展示图的展示位置
-          grid: {
-            top: "20%",
-            left: "3%",
-            right: "6%",
-            bottom: "3%",
-            containLabel: true, // 距离是包含坐标轴上的文字
-          },
-          //图例的展示，通过name与series里对应
-          legend: {
-            // name:"数量",
-            show: false,
-            right: 10,
-            top: 10,
-            icon: "circle",
-            type:"scroll"
-          },
+      getdata();
+      // console.log("onMounted", datas);
+      chart.setOption({
+        //标题配置
+        title: {
+          text: "▎网页分类",
+          left: 10,
+          top: 10,
+        },
+        //展示图的展示位置
+        grid: {
+          top: "20%",
+          left: "3%",
+          right: "6%",
+          bottom: "3%",
+          containLabel: true, // 距离是包含坐标轴上的文字
+        },
+        //图例的展示，通过name与series里对应
+        legend: {
+          // name:"数量",
+          show: false,
+          right: 10,
+          top: 10,
+          icon: "circle",
+          type: "scroll",
+        },
 
-          //鼠标在图上时的具体信息展示
-          tooltip: {
-            show: true,
-            trigger: 'item',
-          },
-          series: [
-            {
-              // name: "数量",
-              type: "pie",
-              legendHoverLink :true,
+        //鼠标在图上时的具体信息展示
+        tooltip: {
+          show: true,
+          trigger: "item",
+        },
+        series: [
+          {
+            // name: "数量",
+            type: "pie",
+            legendHoverLink: true,
+            label: {
+              show: true,
+              position: "inside",
+              color: "#fff",
+            },
+            emphasis: {
               label: {
                 show: true,
-                position: "inside",
-                color:"#fff"
               },
-              emphasis: {
-                label: {
-                  show: true,
-                },
-                labelLine: {
-                  show: false,
-                },
+              labelLine: {
+                show: false,
               },
             },
-          ],
-        });
-        window.onresize = function () {
-          //自适应大小
-          chart.resize();
-        };
+          },
+        ],
       });
+      window.onresize = function () {
+        //自适应大小
+        chart.resize();
+      };
     }
     //获取并更新图表数据
     function update() {
-      getdata();
-      let dataOption = {
-        series: [
-          {
-            data: datas,
-          },
-        ],
-      };
-      chart.setOption(dataOption);
+      getdata().then(() => {
+        let dataOption = {
+          series: [
+            {
+              data: datas,
+            },
+          ],
+        };
+        chart.setOption(dataOption);
+      });
     }
     //axios获取数据
     async function getdata() {
@@ -123,7 +124,7 @@ export default {
         .get("/api/testdata")
         .then(function (response) {
           datas = response.data.data.list.map((item) => {
-            return {value:item.age,name:item.name};
+            return { value: item.age, name: item.name };
           });
         })
         .catch(function (error) {
@@ -143,7 +144,7 @@ export default {
     watch(
       collapse,
       (newValue, oldValue) => {
-        console.log("折叠变化了", newValue, oldValue);
+        // console.log("折叠变化了", newValue, oldValue);
         setTimeout(() => {
           chart.resize();
         }, 300);

@@ -33,6 +33,7 @@ export default {
     onMounted(() => {
       nextTick(() => {
         initChart();
+        update()
         startInterval();
       });
     });
@@ -44,8 +45,8 @@ export default {
     //初始化表格
     function initChart() {
       chart = $echarts.init(document.getElementById("map"), "dark");
-      getdata().then(() => {
-        console.log("onMounted", datas);
+      getdata()
+        // console.log("onMounted", datas);
         chart.setOption({
           //标题配置
           title: {
@@ -66,7 +67,7 @@ export default {
             // name与下方seris的对应
             name: "test1",
             right: 20,
-            top: '10%',
+            top: "10%",
             // icon: 'circle'
           },
           xAxis: {
@@ -89,8 +90,9 @@ export default {
           },
           series: [
             {
-              name:"test1",
+              name: "test1",
               type: "line",
+              stack: 'map',
               label: {
                 show: true,
                 position: "top",
@@ -121,19 +123,19 @@ export default {
           //自适应大小
           chart.resize();
         };
-      });
     }
     //获取并更新图表数据
     function update() {
-      getdata();
-      let dataOption = {
-        series: [
-          {
-            data: datas,
-          },
-        ],
-      };
-      chart.setOption(dataOption);
+      getdata().then(() => {
+        let dataOption = {
+          series: [
+            {
+              data: datas,
+            },
+          ],
+        };
+        chart.setOption(dataOption);
+      });
     }
     //axios获取数据
     async function getdata() {
@@ -155,13 +157,13 @@ export default {
       }
       timeId = setInterval(() => {
         update();
-      }, 500);
+      }, 5000);
     }
     //折叠栏更改时resize，注意time的设置
     watch(
       collapse,
       (newValue, oldValue) => {
-        console.log("折叠变化了", newValue, oldValue);
+        // console.log("折叠变化了", newValue, oldValue);
         setTimeout(() => {
           chart.resize();
         }, 300);

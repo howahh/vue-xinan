@@ -11,13 +11,13 @@ import {
   watch,
   computed,
   ref,
-  nextTick
+  nextTick,
 } from "vue";
 import { inject } from "vue";
 import { useStore } from "vuex";
 export default {
   name: "LineChart",
-  props:['myid'],
+  props: ["myid"],
   setup(props) {
     /// 声明接收一下echart,axios
     const store = useStore();
@@ -33,11 +33,11 @@ export default {
 
     onMounted(() => {
       //防止渲染时未挂载，虽然不知道为什么会出这个bug
-      nextTick(()=>{
+      nextTick(() => {
         initChart();
+        update()
         startInterval();
-      })
-
+      });
     });
 
     onUnmounted(() => {
@@ -47,95 +47,95 @@ export default {
     //初始化表格
     function initChart() {
       chart = $echarts.init(document.getElementById(props.myid), "dark");
-      getdata().then(() => {
-        console.log("onMounted", datas);
-        chart.setOption({
-          //标题配置
-          title: {
-            text: "▎网页新增数量",
-            left: 10,
-            top: 10,
-          },
-          //展示图的展示位置
-          grid: {
-            top: "20%",
-            left: "3%",
-            right: "6%",
-            bottom: "3%",
-            containLabel: true, // 距离是包含坐标轴上的文字
-          },
-          //图例的展示，通过name与series里对应
-          legend: {
-            name:"数量",
-            show: true,
-            right: 10,
-            top:10
-          },
-          xAxis: {
-            type: "value",
-          },
-          yAxis: {
-            type: "category",
-            data: ["七月", "八月", "九月", "十月", "十一月", "十二月"],
-          },
-          //鼠标在图上时的具体信息展示
-          tooltip: {
-            trigger: "axis",
-            axisPointer: {
-              type: "line",
-              z: 0,
-              lineStyle: {
-                color: "#2D3443",
-              },
+      getdata();
+      // console.log("onMounted", datas);
+      chart.setOption({
+        //标题配置
+        title: {
+          text: "▎网页新增数量",
+          left: 10,
+          top: 10,
+        },
+        //展示图的展示位置
+        grid: {
+          top: "20%",
+          left: "3%",
+          right: "6%",
+          bottom: "3%",
+          containLabel: true, // 距离是包含坐标轴上的文字
+        },
+        //图例的展示，通过name与series里对应
+        legend: {
+          name: "数量",
+          show: true,
+          right: 10,
+          top: 10,
+        },
+        xAxis: {
+          type: "value",
+        },
+        yAxis: {
+          type: "category",
+          data: ["七月", "八月", "九月", "十月", "十一月", "十二月"],
+        },
+        //鼠标在图上时的具体信息展示
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "line",
+            z: 0,
+            lineStyle: {
+              color: "#2D3443",
             },
           },
-          series: [
-            {
-              name:"数量",
-              type: "bar",
-              label: {
-                show: true,
-                position: "right",
-                textStyle: {
-                  color: "white",
+        },
+        series: [
+          {
+            name: "数量",
+            type: "bar",
+            label: {
+              show: true,
+              position: "right",
+              textStyle: {
+                color: "white",
+              },
+            },
+            itemStyle: {
+              // 指明颜色渐变的方向
+              // 指明不同百分比之下颜色的值
+              color: new $echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                // 百分之0状态之下的颜色值
+                {
+                  offset: 0,
+                  color: "#5052EE",
                 },
-              },
-              itemStyle: {
-                // 指明颜色渐变的方向
-                // 指明不同百分比之下颜色的值
-                color: new $echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                  // 百分之0状态之下的颜色值
-                  {
-                    offset: 0,
-                    color: "#5052EE",
-                  },
-                  // 百分之100状态之下的颜色值
-                  {
-                    offset: 1,
-                    color: "#AB6EE5",
-                  },
-                ]),
-              },
+                // 百分之100状态之下的颜色值
+                {
+                  offset: 1,
+                  color: "#AB6EE5",
+                },
+              ]),
             },
-          ],
-        });
-        window.onresize = function () {
-          //自适应大小
-          chart.resize();
-        };
+          },
+        ],
       });
+      window.onresize = function () {
+        //自适应大小
+        chart.resize();
+      };
     }
     //获取并更新图表数据
     function update() {
-      getdata();
-      let dataOption = {
-        series: [
-          {
-            data: datas,
-          },
-        ],
-      };
-      chart.setOption(dataOption);
+      getdata().then(() => {
+        let dataOption = {
+          series: [
+            {
+              data: datas,
+            },
+          ],
+        };
+        chart.setOption(dataOption);
+      });
     }
     //axios获取数据
     async function getdata() {
@@ -157,13 +157,13 @@ export default {
       }
       timeId = setInterval(() => {
         update();
-      }, 500);
+      }, 5000);
     }
     //折叠栏更改时resize，注意time的设置
     watch(
       collapse,
       (newValue, oldValue) => {
-        console.log("折叠变化了", newValue, oldValue);
+        // console.log("折叠变化了", newValue, oldValue);
         setTimeout(() => {
           chart.resize();
         }, 300);
@@ -176,8 +176,8 @@ export default {
 };
 </script>
 
-<style scoped   lang="css">
-.little-holder{
+<style scoped lang="css">
+.little-holder {
   height: 224px;
   border-radius: 5px;
   background-color: #0d265e;
