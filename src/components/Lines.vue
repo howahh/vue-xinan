@@ -1,5 +1,5 @@
 <template>
-  <div :id="myid" class="pie-holder"></div>
+  <div class="lines-holder" :id="myid"></div>
 </template>
 
 <script>
@@ -16,7 +16,7 @@ import {
 import { inject } from "vue";
 import { useStore } from "vuex";
 export default {
-  name: "Pie",
+  name: "Lines",
   props: ["myid"],
   setup(props) {
     /// 声明接收一下echart,axios
@@ -52,7 +52,7 @@ export default {
       chart.setOption({
         //标题配置
         title: {
-          text: "▎网页分类",
+          text: "▎网页变化数量",
           left: 10,
           top: 10,
           textStyle: {
@@ -69,36 +69,86 @@ export default {
         },
         //图例的展示，通过name与series里对应
         legend: {
-          // name:"数量",
-          show: false,
+          show: true,
           right: 10,
           top: 10,
-          icon: "circle",
-          type: "scroll",
         },
-
+        yAxis: {
+          type: "value",
+        },
+        xAxis: {
+          type: "category",
+          data: ["七月", "八月", "九月", "十月", "十一月", "十二月"],
+          boundaryGap: false,
+        },
         //鼠标在图上时的具体信息展示
         tooltip: {
-          show: true,
-          trigger: "item",
+          trigger: "axis",
+          axisPointer: {
+            type: "line",
+            z: 0,
+            lineStyle: {
+              color: "#2D3443",
+            },
+          },
         },
         series: [
           {
-            // name: "数量",
-            type: "pie",
-            legendHoverLink: true,
+            name: "未侵权",
+            type: "line",
+            stack: "1",
+            areaStyle: {},
             label: {
               show: true,
-              position: "inside",
-              color: "#fff",
+              position: "right",
+              textStyle: {
+                color: "white",
+              },
             },
-            emphasis: {
-              label: {
-                show: true,
+            itemStyle: {
+              // 指明颜色渐变的方向
+              // 指明不同百分比之下颜色的值
+              color: new $echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                // 百分之0状态之下的颜色值
+                {
+                  offset: 0,
+                  color: "rgba(11, 168, 44, 0.1)",
+                },
+                // 百分之100状态之下的颜色值
+                {
+                  offset: 1,
+                  color: "rgba(11, 168, 44, 0.5)",
+                },
+              ]),
+            },
+          },
+          {
+            name: "侵权",
+            type: "line",
+            stack: "1",
+            areaStyle: {},
+            label: {
+              show: true,
+              position: "right",
+              textStyle: {
+                color: "white",
               },
-              labelLine: {
-                show: false,
-              },
+            },
+            itemStyle: {
+              // 指明颜色渐变的方向
+              // 指明不同百分比之下颜色的值
+              color: new $echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                // 百分之0状态之下的颜色值
+                {
+                  offset: 0,
+                  color: "rgba(254, 33, 30, 0.1)",
+                },
+                // 百分之100状态之下的颜色值
+                {
+                  offset: 1,
+                  color: "rgba(254, 33, 30, 0.5)",
+                },
+              ]),
             },
           },
         ],
@@ -111,10 +161,18 @@ export default {
     //获取并更新图表数据
     function update() {
       getdata().then(() => {
+        let data2 = datas.map((item) => {
+          return item + 5;
+        });
+        // console.log("datas",datas)
+        // console.log("data2",data2)
         let dataOption = {
           series: [
             {
               data: datas,
+            },
+            {
+              data: data2,
             },
           ],
         };
@@ -127,7 +185,7 @@ export default {
         .get("/api/testdata")
         .then(function (response) {
           datas = response.data.data.list.map((item) => {
-            return { value: item.age, name: item.name };
+            return item.age;
           });
         })
         .catch(function (error) {
@@ -161,10 +219,8 @@ export default {
 </script>
 
 <style>
-.pie-holder {
+.lines-holder {
   height: 224px;
-  border-radius: 5px;
-  /* background-color: #020f2e; */
   margin: 6px;
   width: 100%;
   border: 1px solid;

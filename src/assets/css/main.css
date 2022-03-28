@@ -39,7 +39,9 @@ a {
     padding: 10px;
     overflow-y: scroll;
     box-sizing: border-box;
-    background-color: #020f2e;
+    /* background-image:url('../img/login-bg.jpg');
+    background-size: 100% 100%; */
+    background-color: black;
 }
 
 .content-collapse {

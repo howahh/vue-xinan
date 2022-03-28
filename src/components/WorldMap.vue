@@ -26,15 +26,22 @@ export default {
     let $axios = inject("axios");
     //reactive化
     let datas = reactive([]);
+    //地图json数据
+    let mapData = reactive({});
+    //中文名称
+    let nameMap = reactive({});
     let chart = reactive(null);
     //定时器id
     let timeId = null;
 
     onMounted(() => {
       nextTick(() => {
-        initChart();
-        update()
-        startInterval();
+        getState().then(() => {
+          // console.log("map", nameMap);
+          initChart();
+        });
+        // update()
+        // startInterval();
       });
     });
 
@@ -42,87 +49,69 @@ export default {
       $echarts.dispose;
       clearInterval(timeId);
     });
+    //获取地图json
+    async function getState() {
+      mapData = await $axios.get("http://localhost:3000/map/world_new.json");
+      nameMap = await $axios.get("http://localhost:3000/map/mapChinaName.json");
+    }
+
     //初始化表格
     function initChart() {
-      chart = $echarts.init(document.getElementById("map"), "dark");
-      getdata()
-        // console.log("onMounted", datas);
-        chart.setOption({
-          //标题配置
-          title: {
-            text: "▎网页新增数量",
-            left: 10,
-            top: 10,
+      $echarts.registerMap("world", mapData.data);
+      chart = $echarts.init(document.getElementById("map"),);
+      getdata();
+      chart.setOption({
+        title: {
+          text: "▎ 地区分布",
+          left: 20,
+          top: 20,
+          textStyle: {
+            color:'#fff'
+          }
+        },
+        // visualMap: {
+        //   left: "right",
+        //   min: 500000,
+        //   max: 38000000,
+        //   inRange: {
+        //     // prettier-ignore
+        //     color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'],
+        //   },
+        //   text: ["High", "Low"],
+        //   calculable: true,
+        // },
+        geo: {
+          map: "world",
+          top: "5%",
+          bottom: "5%",
+          roam: true,
+          label: {
+            show: false,
+            // textBorderColor:'white',i i
+            // color: "#fff",
+            // fontSize:20,
           },
-          //展示图的展示位置
-          grid: {
-            top: "20%",
-            left: "3%",
-            right: "6%",
-            bottom: "3%",
-            containLabel: true, // 距离是包含坐标轴上的文字
+          scaleLimit: {
+            min: 1,
+            max: 5,
           },
-          // 图例的设置
-          legend: {
-            // name与下方seris的对应
-            name: "test1",
-            right: 20,
-            top: "10%",
-            // icon: 'circle'
+          nameMap: nameMap.data,
+          itemStyle: {
+            areaColor: "rgb(49,114,191,0.5)",
+            borderColor: "#fff",
+            // borderType: "dotted",
           },
-          xAxis: {
-            type: "category",
-            data: ["七月", "八月", "九月", "十月", "十一月", "十二月"],
-          },
-          yAxis: {
-            type: "value",
-          },
-          // 鼠标移动在图中的显示
-          tooltip: {
-            trigger: "axis",
-            axisPointer: {
-              type: "line",
-              z: 0,
-              lineStyle: {
-                color: "#2D3443",
-              },
-            },
-          },
-          series: [
-            {
-              name: "test1",
-              type: "line",
-              stack: 'map',
-              label: {
-                show: true,
-                position: "top",
-                textStyle: {
-                  color: "white",
-                },
-              },
-              itemStyle: {
-                // 指明颜色渐变的方向
-                // 指明不同百分比之下颜色的值
-                color: new $echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                  // 百分之0状态之下的颜色值
-                  {
-                    offset: 0,
-                    color: "#5052EE",
-                  },
-                  // 百分之100状态之下的颜色值
-                  {
-                    offset: 1,
-                    color: "#AB6EE5",
-                  },
-                ]),
-              },
-            },
-          ],
-        });
-        window.onresize = function () {
-          //自适应大小
-          chart.resize();
-        };
+        },
+        legend: {
+          left: "5%",
+          bottom: "5%",
+          orient: "vertical",
+        },
+      });
+      window.onresize = function () {
+        //自适应大小
+        chart.resize();
+      };
     }
     //获取并更新图表数据
     function update() {
@@ -178,10 +167,13 @@ export default {
 
 <style scoped lang="css">
 .map-holder {
-  height: 453px;
+  height: 456px;
+  /* background-image:url('../assets/img/img.jpg');
+  background-size: 100% 100%; */
   border-radius: 5px;
-  /* background-color: #0d265e; */
   margin: 6px;
   width: 100%;
+  border: 1px solid;
+
 }
 </style>

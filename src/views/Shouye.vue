@@ -1,5 +1,4 @@
 <template >
-  <!-- <button @click="update">aaa</button> -->
   <div class="all">
     <el-row :gutter="4">
       <!-- 左侧两个 -->
@@ -15,7 +14,7 @@
       <!-- 右边两列 -->
       <el-col :span="6">
         <Pie myid="test3"/>
-        <LineChart myid="test4"/>
+        <Lines myid="test4"/>
       </el-col>
       <!-- 下面的一行 -->
     </el-row>
@@ -32,6 +31,7 @@ import LineChart from "../components/LineChart.vue";
 import Map from "../components/WorldMap.vue"
 import Pie from "../components/Pie.vue"
 import Circle from "../components/Circle.vue"
+import Lines from "../components/Lines.vue"
 
 export default {
   name: "shouye",
@@ -40,6 +40,7 @@ export default {
     Map,
     Pie,
     Circle,
+    Lines,
   },
 };
 </script>
@@ -65,13 +66,6 @@ export default {
 .el-card /deep/ .el-card__body {
   padding: 0px;
 }
-.little-holder{
-  height: 224px;
-  border-radius: 5px;
-  background-color: #0d265e;
-  margin: 6px;
-  width: 100%;
-  margin-right: 6px;
-}
+
 
 </style>

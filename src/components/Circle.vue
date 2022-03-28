@@ -34,7 +34,7 @@ export default {
       //防止渲染时未挂载，虽然不知道为什么会出这个bug
       // nextTick(() => {
       //   initChart();
-      //   update();
+      //   update();F
       //   startInterval();
       // });
       initChart();
@@ -48,122 +48,125 @@ export default {
     });
     //初始化表格
     function initChart() {
-      chart = $echarts.init(document.getElementById(props.myid), "dark");
-        const centerPointers = [
-          ["18%", "40%"],
-          ["50%", "40%"],
-          ["82%", "40%"],
-          ["18%", "75%"],
-          ["50%", "75%"],
-          ["82%", "75%"],
-        ];
-        const titleFontSize =
-          (document.getElementById(props.myid).offsetWidth / 100) * 3.6;
-        const innerRadius = titleFontSize * 2.8;
-        const outterRadius = innerRadius * 1.125;
-        chart.setOption({
-          //标题配置
-          title: {
-            text: "▎网页分类",
-            left: 10,
-            top: 10,
+      chart = $echarts.init(document.getElementById(props.myid));
+      const centerPointers = [
+        ["18%", "40%"],
+        ["50%", "40%"],
+        ["82%", "40%"],
+        ["18%", "75%"],
+        ["50%", "75%"],
+        ["82%", "75%"],
+      ];
+      const titleFontSize =
+        (document.getElementById(props.myid).offsetWidth / 100) * 3.6;
+      const innerRadius = titleFontSize * 2.8;
+      const outterRadius = innerRadius * 1.125;
+      chart.setOption({
+        //标题配置
+        title: {
+          text: "▎网页分类",
+          left: 10,
+          top: 10,
+          textStyle: {
+            color: "#fff",
           },
-          series: [
-            {
-              type: "pie",
-              center: centerPointers[0],
-              hoverAnimation: false,
-              radius: [outterRadius, innerRadius],
-              label: {
-                show: true,
-                position: "center",
-                fontSize: titleFontSize,
-              },
-              labelLine: {
-                show: false,
-              },
+        },
+        series: [
+          {
+            type: "pie",
+            center: centerPointers[0],
+            hoverAnimation: false,
+            radius: [outterRadius, innerRadius],
+            label: {
+              show: true,
+              position: "center",
+              fontSize: titleFontSize,
             },
-            {
-              type: "pie",
-              center: centerPointers[1],
-              hoverAnimation: false,
-              radius: [outterRadius, innerRadius],
-              label: {
-                show: true,
-                position: "center",
-                fontSize: titleFontSize,
-              },
-              labelLine: {
-                show: false,
-              },
+            labelLine: {
+              show: false,
             },
-            {
-              type: "pie",
-              center: centerPointers[2],
-              hoverAnimation: false,
-              radius: [outterRadius, innerRadius],
-              label: {
-                show: true,
-                position: "center",
-                fontSize: titleFontSize,
-              },
-              labelLine: {
-                show: false,
-              },
+          },
+          {
+            type: "pie",
+            center: centerPointers[1],
+            hoverAnimation: false,
+            radius: [outterRadius, innerRadius],
+            label: {
+              show: true,
+              position: "center",
+              fontSize: titleFontSize,
             },
-            {
-              type: "pie",
-              center: centerPointers[3],
-              hoverAnimation: false,
-              radius: [outterRadius, innerRadius],
-              label: {
-                show: true,
-                position: "center",
-                fontSize: titleFontSize,
-              },
-              labelLine: {
-                show: false,
-              },
+            labelLine: {
+              show: false,
             },
-            {
-              type: "pie",
-              center: centerPointers[4],
-              hoverAnimation: false,
-              radius: [outterRadius, innerRadius],
-              label: {
-                show: true,
-                position: "center",
-                fontSize: titleFontSize,
-              },
-              labelLine: {
-                show: false,
-              },
+          },
+          {
+            type: "pie",
+            center: centerPointers[2],
+            hoverAnimation: false,
+            radius: [outterRadius, innerRadius],
+            label: {
+              show: true,
+              position: "center",
+              fontSize: titleFontSize,
             },
-            {
-              type: "pie",
-              center: centerPointers[5],
-              hoverAnimation: false,
-              radius: [outterRadius, innerRadius],
-              label: {
-                show: true,
-                position: "center",
-                fontSize: titleFontSize,
-              },
-              labelLine: {
-                show: false,
-              },
+            labelLine: {
+              show: false,
             },
-          ],
-        });
-        window.onresize = function () {
-          //自适应大小
-          chart.resize();
-        };
+          },
+          {
+            type: "pie",
+            center: centerPointers[3],
+            hoverAnimation: false,
+            radius: [outterRadius, innerRadius],
+            label: {
+              show: true,
+              position: "center",
+              fontSize: titleFontSize,
+            },
+            labelLine: {
+              show: false,
+            },
+          },
+          {
+            type: "pie",
+            center: centerPointers[4],
+            hoverAnimation: false,
+            radius: [outterRadius, innerRadius],
+            label: {
+              show: true,
+              position: "center",
+              fontSize: titleFontSize,
+            },
+            labelLine: {
+              show: false,
+            },
+          },
+          {
+            type: "pie",
+            center: centerPointers[5],
+            hoverAnimation: false,
+            radius: [outterRadius, innerRadius],
+            label: {
+              show: true,
+              position: "center",
+              fontSize: titleFontSize,
+            },
+            labelLine: {
+              show: false,
+            },
+          },
+        ],
+      });
+      window.onresize = function () {
+        //自适应大小
+        chart.resize();
+      };
     }
     //获取并更新图表数据
     function update() {
       getdata().then(() => {
-        console.log("updated", datas);
+        // console.log("updated", datas);
         const colorArrs = [
           ["#4FF778", "#0BA82C"],
           ["#E5DD45", "#E8B11C"],
@@ -258,8 +261,9 @@ export default {
 .circle-holder {
   height: 224px;
   border-radius: 5px;
-  background-color: #020f2e;
+  /* background-color: #020f2e; */
   margin: 6px;
   width: 100%;
+  border: 1px solid;
 }
 </style>

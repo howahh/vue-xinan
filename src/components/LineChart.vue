@@ -1,5 +1,5 @@
 <template>
-  <div class="little-holder" :id="myid"></div>
+  <div class="line-holder" :id="myid"></div>
 </template>
 
 <script>
@@ -35,7 +35,7 @@ export default {
       //防止渲染时未挂载，虽然不知道为什么会出这个bug
       nextTick(() => {
         initChart();
-        update()
+        update();
         startInterval();
       });
     });
@@ -46,7 +46,7 @@ export default {
     });
     //初始化表格
     function initChart() {
-      chart = $echarts.init(document.getElementById(props.myid), "dark");
+      chart = $echarts.init(document.getElementById(props.myid));
       getdata();
       // console.log("onMounted", datas);
       chart.setOption({
@@ -55,6 +55,9 @@ export default {
           text: "▎网页新增数量",
           left: 10,
           top: 10,
+          textStyle: {
+            color: "#fff",
+          },
         },
         //展示图的展示位置
         grid: {
@@ -177,11 +180,12 @@ export default {
 </script>
 
 <style scoped lang="css">
-.little-holder {
+.line-holder {
   height: 224px;
   border-radius: 5px;
-  background-color: #0d265e;
+  /* background-color: #0d265e; */
   margin: 6px;
   width: 100%;
+  border: 1px solid;
 }
 </style>
