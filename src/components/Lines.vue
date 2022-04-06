@@ -224,6 +224,7 @@ export default {
   margin: 6px;
   width: 100%;
   border: 1px solid;
-
+  border-radius: 5px;
+  border-color:white;
 }
 </style>

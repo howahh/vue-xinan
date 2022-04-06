@@ -115,9 +115,9 @@ export default {
     position: relative;
     height: 30px;
     overflow: hidden;
-    background: #fff;
+    background: rgba(50,65,87);
     padding-right: 120px;
-    box-shadow: 0 3px 3px #ddd;
+    box-shadow: 0 0px 0px #ddd;
 }
 
 .tags ul {
@@ -173,10 +173,11 @@ export default {
     top: 0;
     box-sizing: border-box;
     padding-top: 1px;
+
     text-align: center;
     width: 110px;
     height: 30px;
-    background: #fff;
+    background: rgba(50,65,87);
     box-shadow: -3px 0 15px 3px rgba(0, 0, 0, 0.1);
     z-index: 10;
 }

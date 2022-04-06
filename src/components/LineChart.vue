@@ -187,5 +187,7 @@ export default {
   margin: 6px;
   width: 100%;
   border: 1px solid;
+  border-color:white;
+
 }
 </style>
