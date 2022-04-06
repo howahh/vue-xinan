@@ -1,5 +1,7 @@
 <template>
-  <div class="map-holder" id="map"></div>
+  <div id="con">
+    <div class="map-holder" id="map"></div>
+  </div>
 </template>
 
 <script>
@@ -56,15 +58,15 @@ export default {
       mapData = await $axios.get("http://localhost:3000/map/world.json");
       nameMap = await $axios.get("http://localhost:3000/map/mapChinaName.json");
       chinaData = await $axios.get("http://localhost:3000/map/china.json");
-
     }
 
     //初始化表格
     function initChart() {
       $echarts.registerMap("world", mapData.data);
+      $echarts.registerMap("china", chinaData.data);
       chart = $echarts.init(document.getElementById("map"));
       getdata();
-      chart.setOption({
+      let options = {
         title: {
           text: "▎ 地区分布",
           left: 20,
@@ -83,12 +85,12 @@ export default {
             show: false,
           },
           scaleLimit: {
-            min: 1,
+            min: 0.85,
             max: 5,
           },
           nameMap: nameMap.data,
           itemStyle: {
-            areaColor: "rgb(49,114,191,0.9)",
+            areaColor: "rgb(49,114,191)",
             borderColor: "#fff",
             // emphasis: {
             //   focus: 'self',
@@ -109,11 +111,28 @@ export default {
           bottom: "5%",
           orient: "vertical",
         },
-      });
+      };
+      chart.setOption(options);
       window.onresize = function () {
         //自适应大小
         chart.resize();
       };
+      chart.on("click", async (arg) => {
+        if (arg.name == "中国") {
+          chart.setOption({
+            geo: {
+              map: "china",
+            },
+          });
+        }
+      });
+      chart.on("dbclick", async (arg) => {
+        chart.setOption({
+            geo: {
+              map: "world",
+            },
+          });
+      });
     }
     //获取并更新图表数据
     function update() {
@@ -127,8 +146,8 @@ export default {
                 scale: 5,
                 brushType: "stroke",
               },
-              itemStyle:{
-                color:"red",
+              itemStyle: {
+                color: "#FF6666",
               },
               name: "威胁",
               data: [
@@ -178,7 +197,7 @@ export default {
       { immediate: true }
     );
 
-    return { getdata, datas, update, chart, initChart, startInterval};
+    return { getdata, datas, update, chart, initChart, startInterval };
   },
 };
 </script>
