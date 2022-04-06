@@ -1,5 +1,5 @@
 <template>
-  <div id="con">
+  <div id="con" @dblclick="revertMap">
     <div class="map-holder" id="map"></div>
   </div>
 </template>
@@ -126,12 +126,15 @@ export default {
           });
         }
       });
-      chart.on("dbclick", async (arg) => {
-        chart.setOption({
+      chart.getZr().on("click", async (arg) => {
+        if (!arg.target) {
+          console.log(arg)
+          chart.setOption({
             geo: {
               map: "world",
             },
           });
+        }
       });
     }
     //获取并更新图表数据
