@@ -28,20 +28,22 @@ export default {
     let datas = reactive([]);
     //地图json数据
     let mapData = reactive({});
+    let chinaData = reactive({});
     //中文名称
     let nameMap = reactive({});
     let chart = reactive(null);
     //定时器id
     let timeId = null;
 
+    // var place = reactive([{ name: "西藏", value: [32.31, 85.52] }]);
+
     onMounted(() => {
       nextTick(() => {
         getState().then(() => {
-          // console.log("map", nameMap);
           initChart();
+          update();
+          // startInterval();
         });
-        // update()
-        // startInterval();
       });
     });
 
@@ -51,14 +53,16 @@ export default {
     });
     //获取地图json
     async function getState() {
-      mapData = await $axios.get("http://localhost:3000/map/world_new.json");
+      mapData = await $axios.get("http://localhost:3000/map/world.json");
       nameMap = await $axios.get("http://localhost:3000/map/mapChinaName.json");
+      chinaData = await $axios.get("http://localhost:3000/map/china.json");
+
     }
 
     //初始化表格
     function initChart() {
       $echarts.registerMap("world", mapData.data);
-      chart = $echarts.init(document.getElementById("map"),);
+      chart = $echarts.init(document.getElementById("map"));
       getdata();
       chart.setOption({
         title: {
@@ -66,20 +70,10 @@ export default {
           left: 20,
           top: 20,
           textStyle: {
-            color:'#fff'
-          }
+            color: "#fff",
+          },
         },
-        // visualMap: {
-        //   left: "right",
-        //   min: 500000,
-        //   max: 38000000,
-        //   inRange: {
-        //     // prettier-ignore
-        //     color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'],
-        //   },
-        //   text: ["High", "Low"],
-        //   calculable: true,
-        // },
+
         geo: {
           map: "world",
           top: "5%",
@@ -87,9 +81,6 @@ export default {
           roam: true,
           label: {
             show: false,
-            // textBorderColor:'white',i i
-            // color: "#fff",
-            // fontSize:20,
           },
           scaleLimit: {
             min: 1,
@@ -97,10 +88,21 @@ export default {
           },
           nameMap: nameMap.data,
           itemStyle: {
-            areaColor: "rgb(49,114,191,0.5)",
+            areaColor: "rgb(49,114,191,0.9)",
             borderColor: "#fff",
-            // borderType: "dotted",
+            // emphasis: {
+            //   focus: 'self',
+            // },
           },
+          regions: [
+            {
+              name: "美国",
+              itemStyle: {
+                areaColor: "#fff",
+                borderColor: "red",
+              },
+            },
+          ],
         },
         legend: {
           left: "5%",
@@ -116,10 +118,26 @@ export default {
     //获取并更新图表数据
     function update() {
       getdata().then(() => {
+        console.log("hello");
         let dataOption = {
           series: [
             {
-              data: datas,
+              type: "effectScatter",
+              rippleEffect: {
+                scale: 5,
+                brushType: "stroke",
+              },
+              itemStyle:{
+                color:"red",
+              },
+              name: "威胁",
+              data: [
+                { name: "北京", value: [116.46, 39.92, 4367] },
+                { name: "上海", value: [121.48, 31.22, 8675] },
+                { name: "广州", value: [113.23, 23.16, 187] },
+                { name: "西安", value: [108.45, 34, 3421] },
+              ],
+              coordinateSystem: "geo",
             },
           ],
         };
@@ -160,7 +178,7 @@ export default {
       { immediate: true }
     );
 
-    return { getdata, datas, update, chart, initChart, startInterval };
+    return { getdata, datas, update, chart, initChart, startInterval};
   },
 };
 </script>
@@ -174,6 +192,6 @@ export default {
   margin: 6px;
   width: 100%;
   border: 1px solid;
-  border-color:white;
+  border-color: white;
 }
 </style>
