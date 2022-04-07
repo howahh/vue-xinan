@@ -1,5 +1,5 @@
 <template>
-  <div id="con" @dblclick="revertMap">
+  <div id="con">
     <div class="map-holder" id="map"></div>
   </div>
 </template>
@@ -34,6 +34,12 @@ export default {
     //中文名称
     let nameMap = reactive({});
     let chart = reactive(null);
+    let testData = reactive([
+      { name: "北京", value: [116.46, 39.92, 4367] },
+      { name: "上海", value: [121.48, 31.22, 8675] },
+      { name: "广州", value: [113.23, 23.16, 187] },
+      { name: "西安", value: [108.45, 34, 3421] },
+    ]);
     //定时器id
     let timeId = null;
 
@@ -84,13 +90,14 @@ export default {
           label: {
             show: false,
           },
+          // center:[50.46, 32.92],
           scaleLimit: {
             min: 0.85,
             max: 5,
           },
           nameMap: nameMap.data,
           itemStyle: {
-            areaColor: "rgb(49,114,191)",
+            areaColor: "rgb(49,114,191,0.9)",
             borderColor: "#fff",
             // emphasis: {
             //   focus: 'self',
@@ -122,18 +129,45 @@ export default {
           chart.setOption({
             geo: {
               map: "china",
+              center:[110.46, 35.92]
             },
           });
         }
       });
+      // let barOption = {
+      //   xAxis: {
+      //     type: "value",
+      //   },
+      //   yAxis: {
+      //     type: "category",
+      //     data: testData.map(function (item) {
+      //       return item.name;
+      //     }),
+      //   },
+      //   series: {
+      //     type: "bar",
+      //     data: testData.map(function (item) {
+      //       return item.value[3];
+      //     }),
+      //     // universalTransition: true,
+      //   },
+      // };
+      let flag = 0;
       chart.getZr().on("click", async (arg) => {
         if (!arg.target) {
-          console.log(arg)
-          chart.setOption({
-            geo: {
-              map: "world",
-            },
-          });
+          if (flag == 0) {
+            chart.setOption({
+              geo: {
+                map: "world",
+                center:[10.46, 13.92]
+              },
+              // flag=1
+            });
+          }
+          // else if(flag==1){
+          //   chart.setOption(barOption)
+          //   flag=0
+          // }
         }
       });
     }
@@ -153,12 +187,13 @@ export default {
                 color: "#FF6666",
               },
               name: "威胁",
-              data: [
-                { name: "北京", value: [116.46, 39.92, 4367] },
-                { name: "上海", value: [121.48, 31.22, 8675] },
-                { name: "广州", value: [113.23, 23.16, 187] },
-                { name: "西安", value: [108.45, 34, 3421] },
-              ],
+              label:{
+                show:true,
+                color: "#fff",
+                offset:[20,20],
+                formatter:'{b}'
+              },
+              data: testData,
               coordinateSystem: "geo",
             },
           ],
@@ -200,7 +235,15 @@ export default {
       { immediate: true }
     );
 
-    return { getdata, datas, update, chart, initChart, startInterval };
+    return {
+      getdata,
+      datas,
+      update,
+      chart,
+      initChart,
+      startInterval,
+      testData,
+    };
   },
 };
 </script>

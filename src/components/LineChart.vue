@@ -73,13 +73,28 @@ export default {
           show: true,
           right: 10,
           top: 10,
+          textStyle: {
+            color:"#fff"
+          }
         },
         xAxis: {
           type: "value",
+          axisLine: {
+            lineStyle: {
+              color: "#fff",
+              width: 1, //这里是为了突出显示加上的
+            },
+          },
         },
         yAxis: {
           type: "category",
           data: ["七月", "八月", "九月", "十月", "十一月", "十二月"],
+          axisLine: {
+            lineStyle: {
+              color: "#fff",
+              width: 1, //这里是为了突出显示加上的
+            },
+          },
         },
         //鼠标在图上时的具体信息展示
         tooltip: {
