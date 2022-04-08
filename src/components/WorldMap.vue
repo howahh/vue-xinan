@@ -70,7 +70,7 @@ export default {
     function initChart() {
       $echarts.registerMap("world", mapData.data);
       $echarts.registerMap("china", chinaData.data);
-      chart = $echarts.init(document.getElementById("map"));
+      chart = $echarts.init(document.getElementById("map"),'dark');
       getdata();
       let options = {
         title: {
@@ -103,15 +103,6 @@ export default {
             //   focus: 'self',
             // },
           },
-          regions: [
-            {
-              name: "美国",
-              itemStyle: {
-                areaColor: "#fff",
-                borderColor: "red",
-              },
-            },
-          ],
         },
         legend: {
           left: "5%",
@@ -187,6 +178,12 @@ export default {
                 color: "#FF6666",
               },
               name: "威胁",
+              nameStyle: {
+                color:'#fff'
+              },
+              legend: {
+                show:false
+              },
               label:{
                 show:true,
                 color: "#fff",

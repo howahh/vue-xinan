@@ -36,12 +36,12 @@ a {
 .content {
     width: auto;
     height: 100%;
-    padding: 10px;
+    padding: 0px;
     overflow-y: scroll;
     box-sizing: border-box;
-    background-image:url('../img/logoin.jpg');
-    background-size: 100% 100%;
-    /* background-color: black; */
+    /* background-image:url('../img/logoin.jpg');
+    background-size: 100% 100%; */
+    background-color: '#fff';
 }
 
 .content-collapse {

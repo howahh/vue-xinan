@@ -1,26 +1,26 @@
-<template >
+<template>
   <div class="all">
     <el-row :gutter="4">
       <!-- 左侧两个 -->
       <el-col :span="6">
         <!-- 系统运行状态 -->
-        <LineChart myid="test1"/>
-        <Circle myid="test2"/>
+        <LineChart myid="test1" />
+        <Circle myid="test2" />
       </el-col>
       <!-- 地图 -->
       <el-col :span="12">
-        <Map/>
+        <Map />
       </el-col>
       <!-- 右边两列 -->
       <el-col :span="6">
-        <Pie myid="test3"/>
-        <Lines myid="test4"/>
+        <Pie myid="test3" />
+        <Lines myid="test4" />
       </el-col>
       <!-- 下面的一行 -->
     </el-row>
     <el-row :gutter="20">
       <el-col :span="24">
-        <LineChart myid="test5"/>
+        <LineChart myid="test5" />
       </el-col>
     </el-row>
   </div>
@@ -28,10 +28,10 @@
 
 <script>
 import LineChart from "../components/LineChart.vue";
-import Map from "../components/WorldMap.vue"
-import Pie from "../components/Pie.vue"
-import Circle from "../components/Circle.vue"
-import Lines from "../components/Lines.vue"
+import Map from "../components/WorldMap.vue";
+import Pie from "../components/Pie.vue";
+import Circle from "../components/Circle.vue";
+import Lines from "../components/Lines.vue";
 
 export default {
   name: "shouye",
@@ -56,16 +56,8 @@ export default {
   border-radius: 0px;
   margin: 0px;
 }
-.el-card {
-  padding: 0px;
-  margin: 5px;
-  /* margin-bottom: 10px;  */
-  background-color: #0d265e;
-  /* width:auto; */
+.all {
+  background-image: url("../assets/img/logoin.jpg");
+  background-size: 100% 100%;
 }
-.el-card /deep/ .el-card__body {
-  padding: 0px;
-}
-
-
 </style>
