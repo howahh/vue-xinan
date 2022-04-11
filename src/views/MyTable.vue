@@ -2,7 +2,7 @@
     <div id="all">
         <el-row :gutter="4">
             <el-col :span="6">
-                <el-row>1</el-row>
+                <el-row>1123123</el-row>
                 <el-row>2</el-row>
             </el-col>
             <el-col>
