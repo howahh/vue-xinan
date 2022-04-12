@@ -57,7 +57,7 @@ export default {
   margin: 0px;
 }
 .all {
-  background-image: url("../assets/img/logoin.jpg");
+  background-image: url("../assets/img/3.gif");
   background-size: 100% 100%;
 }
 </style>

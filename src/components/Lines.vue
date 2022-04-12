@@ -73,8 +73,8 @@ export default {
           right: 10,
           top: 10,
           textStyle: {
-            color: '#fff'
-        }
+            color: "#fff",
+          },
         },
         yAxis: {
           type: "value",
