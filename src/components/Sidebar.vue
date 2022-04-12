@@ -49,9 +49,9 @@ export default {
                 title: "我的首页",
             },
             {
-                icon: "el-icon-lx-home",
-                index: "/mytable",
-                title: "我的表格",
+                icon: "el-icon-lx-calendar",
+                index: "/eventhandler",
+                title: "任务管理",
             },
             {
                 icon: "el-icon-lx-cascades",

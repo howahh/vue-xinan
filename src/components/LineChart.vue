@@ -1,5 +1,6 @@
 <template>
   <div class="line-holder" :id="myid"></div>
+  <!-- <p>{{mytype}}</p> -->
 </template>
 
 <script>
@@ -17,7 +18,7 @@ import { inject } from "vue";
 import { useStore } from "vuex";
 export default {
   name: "LineChart",
-  props: ["myid"],
+  props: ['myid','mytype'],
   setup(props) {
     /// 声明接收一下echart,axios
     const store = useStore();
@@ -30,6 +31,8 @@ export default {
     let chart = reactive(null);
     //定时器id
     let timeId = null;
+    let mytype = reactive(props.mytype);
+    
 
     onMounted(() => {
       //防止渲染时未挂载，虽然不知道为什么会出这个bug
@@ -48,7 +51,6 @@ export default {
     function initChart() {
       chart = $echarts.init(document.getElementById(props.myid));
       getdata();
-      // console.log("onMounted", datas);
       chart.setOption({
         //标题配置
         title: {
@@ -74,8 +76,8 @@ export default {
           right: 10,
           top: 10,
           textStyle: {
-            color:"#fff"
-          }
+            color: "#fff",
+          },
         },
         xAxis: {
           type: "value",
@@ -110,7 +112,7 @@ export default {
         series: [
           {
             name: "数量",
-            type: "bar",
+            type: mytype,
             label: {
               show: true,
               position: "right",
@@ -144,6 +146,7 @@ export default {
     }
     //获取并更新图表数据
     function update() {
+      console.log(props);
       getdata().then(() => {
         let dataOption = {
           series: [
@@ -157,12 +160,29 @@ export default {
     }
     //axios获取数据
     async function getdata() {
+      // await $axios
+      //   .get("/api/testdata")
+      //   .then(function (response) {
+      //     console.log(response)
+      //     datas = response.data.data.list.map((item) => {
+      //       return item.age;
+      //     });
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
+
       await $axios
-        .get("/api/testdata")
-        .then(function (response) {
-          datas = response.data.data.list.map((item) => {
-            return item.age;
-          });
+        .post("http://localhost:5000/vpw/getCrawledCount",{
+          interval:'day',
+          dateStart:'2022-1-22',
+          dateEnd:'2022-01-27',
+        })
+        .then((response) => {
+          // console.log(response)
+          datas = response.data.data.map((item) =>{
+            return item.count
+          })
         })
         .catch(function (error) {
           console.log(error);
@@ -189,7 +209,7 @@ export default {
       { immediate: true }
     );
 
-    return { getdata, datas, update, chart, initChart, startInterval };
+    return { getdata, datas, update, chart, initChart, startInterval,mytype};
   },
 };
 </script>
@@ -202,7 +222,6 @@ export default {
   margin: 6px;
   width: 100%;
   border: 1px solid;
-  border-color:white;
-
+  border-color: white;
 }
 </style>

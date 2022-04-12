@@ -1,10 +1,10 @@
 <template>
   <div class="all">
-    <el-row :gutter="4">
+    <el-row :gutter="10">
       <!-- 左侧两个 -->
       <el-col :span="6">
         <!-- 系统运行状态 -->
-        <LineChart myid="test1" />
+        <LineChart myid="test1" mytype='line' />
         <Circle myid="test2" />
       </el-col>
       <!-- 地图 -->
@@ -20,7 +20,7 @@
     </el-row>
     <el-row :gutter="20">
       <el-col :span="24">
-        <LineChart myid="test5" />
+        <LineChart myid="test5" mytype="bar" />
       </el-col>
     </el-row>
   </div>
