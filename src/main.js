@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import installElementPlus from './plugins/element'
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
 import './assets/css/icon.css'
 // 导入mock
 // require('./mock');
