@@ -1,6 +1,6 @@
 <template>
   <div class="all">
-    <el-row :gutter="4">
+    <el-row :gutter="10">
       <!-- 左侧两个 -->
       <el-col :span="6">
         <!-- 系统运行状态 -->

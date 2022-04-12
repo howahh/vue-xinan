@@ -26,12 +26,12 @@ const routes = [
                 component: () => import ( /* webpackChunkName: "shouye" */ "../views/Shouye.vue")
             },
             {
-                path: "/mytable",
-                name: "mytable",
+                path: "/eventhandler",
+                name: "eventhandler",
                 meta: {
-                    title: '我的表格'
+                    title: '任务管理'
                 },
-                component: () => import ( /* webpackChunkName: "shouye" */ "../views/MyTable.vue")
+                component: () => import ( /* webpackChunkName: "shouye" */ "../views/EventHandler.vue")
             },
              {
                 path: "/table",
