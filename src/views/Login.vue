@@ -70,6 +70,12 @@ export default {
           {
             ...param,
           },
+          {
+            headers: {
+              "Content-Type": "application/json;charset=utf-8",
+            },
+            withCredentials: true,
+          }
         )
         .then(function (response) {
           if (response.data.status == 200) {
