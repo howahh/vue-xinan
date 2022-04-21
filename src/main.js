@@ -14,4 +14,5 @@ installElementPlus(app)
 app
     .use(store)
     .use(router)
+    .use(Antd)
     .mount('#app')

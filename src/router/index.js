@@ -53,7 +53,7 @@ const routes = [
                 meta: {
                     title: '表单'
                 },
-                component: () => import ( /* webpackChunkName: "form" */ "../views/BaseForm.vue")
+                component: () => import ( /* webpackChunkName: "form" */ "../views/FormAddSpider.vue")
             }, {
                 path: "/tabs",
                 name: "tabs",

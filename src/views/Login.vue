@@ -65,26 +65,33 @@ export default {
     const login = ref(null);
     function mySubmit() {
       $axios
-        .post("http://localhost:5000/user/login", {
-          ...param,
-        })
+        .post(
+          "http://localhost:5000/user/login",
+          {
+            ...param,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json;charset=utf-8",
+            },
+            withCredentials: true,
+          }
+        )
         .then(function (response) {
           if (response.data.status == 200) {
             ElMessage.success(response.data.msg);
             localStorage.setItem("ms_username", param.email);
             router.push("/");
-          }
-          else if(response.data.status == 203){
+          } else if (response.data.status == 203) {
             ElMessage.warning(response.data.msg);
             router.push("/login");
-          }
-          else if(response.data.status == 202){
+          } else if (response.data.status == 202) {
             ElMessage.error(response.data.msg);
             router.push("/login");
           }
           console.log(response);
         })
-        .catch(function (error) { 
+        .catch(function (error) {
           console.log(error);
         });
     }

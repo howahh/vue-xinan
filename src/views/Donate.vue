@@ -1,26 +1,24 @@
 <template>
-    <div>
-        <div class="crumbs">
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item>
-                    <i class="el-icon-lx-redpacket_fill"></i> 支持作者
-                </el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
-        <div class="container">
-            <div class="plugins-tips">如果该框架对你有帮助，那就请作者喝杯饮料吧！加微信号linxin_20探讨问题。</div>
-            <div>
-                <img src="https://lin-xin.gitee.io/images/weixin.jpg" />
-            </div>
-        </div>
-    </div>
+  <scoll-website class="website" />
 </template>
 
 <script>
+import ScollWebsite from "../components/ScollWebsite.vue";
 export default {
-    name: "donate"
+  components: { ScollWebsite },
+
+  setup() {},
 };
 </script>
 
 <style>
+.website {
+  height: 500px;
+  border-radius: 5px;
+  /* background-color: #020f2e; */
+  margin: 6px;
+  width: 100%;
+  border: 1px solid;
+  border-color: white;
+}
 </style>
