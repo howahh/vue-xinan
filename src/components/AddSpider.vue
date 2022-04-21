@@ -161,7 +161,12 @@
       />
     </a-form-item>
     <a-form-item :wrapper-col="{ span: 12, offset: 6 }">
-      <a-button type="primary" html-type="submit">提交</a-button>
+      <a-button
+        type="primary"
+        v-loading.fullscreen.lock="fullscreenLoading"
+        html-type="submit"
+        >提交</a-button
+      >
     </a-form-item>
   </a-form>
 </template>
@@ -169,8 +174,12 @@
 
 <script>
 import { defineComponent, reactive } from "vue";
+import { ElNotification } from "element-plus";
 import { UploadOutlined, InboxOutlined } from "@ant-design/icons-vue";
 import { inject } from "vue";
+import { ref } from "vue";
+import { ElLoading } from "element-plus";
+import { useRouter } from "vue-router";
 export default {
   name: "AddSpider",
   components: {
@@ -180,6 +189,16 @@ export default {
   setup() {
     let $axios = inject("axios");
     var data_post = reactive({});
+    const route = useRouter();
+    const onFinishFailed = (errorInfo) => {
+      console.log("Failed:", errorInfo);
+    };
+    var versionInfo = reactive([]);
+    let spiderData = reactive({});
+    var getData = reactive({});
+    var spiderInfo = reactive([]);
+    var flag = reactive(true);
+
     const formItemLayout = {
       labelCol: {
         span: 6,
@@ -195,6 +214,25 @@ export default {
     });
 
     var day_of_week = reactive("");
+
+    const fullscreenLoading = ref(false);
+    var filename = reactive("");
+    function openFullScreen1() {
+      fullscreenLoading.value = true;
+      setTimeout(() => {
+        fullscreenLoading.value = false;
+        message();
+        route.push("/EventHandler");
+      }, 3000);
+    }
+
+    const message = () => {
+      ElNotification({
+        title: "提交任务成功",
+        message: "您已经成功提交了一个爬取任务",
+        type: "success",
+      });
+    };
 
     async function run_spider(filename) {
       await $axios
@@ -218,8 +256,6 @@ export default {
           console.log("bad");
         });
     }
-
-    var filename = reactive("");
 
     async function check(values) {
       await $axios
@@ -250,8 +286,6 @@ export default {
       if (formState["checkbox-group"] === undefined) {
         day_of_week = undefined;
       } else {
-        // console.log('1')
-        // console.log(formState["checkbox-group"])
         for (var i = 0; i < formState["checkbox-group"].length; i++) {
           if (i == 0) {
             day_of_week = formState["checkbox-group"][i];
@@ -261,39 +295,42 @@ export default {
         }
       }
 
-      data_post = {
-        project: formState.project,
-        version: "default: the latest version",
-        spider: formState.spider,
-        action: formState.action,
-        task_id: "0",
-        trigger: "cron",
-        name: formState.name,
-        day: formState.day,
-        week: formState.week,
-        day_of_week: day_of_week,
-        hour: formState.hour,
-        minute: formState.minute,
-        second: "0",
-        start_date: "",
-        end_date: "",
-        timezone: "Asia/Shanghai",
-        jitter: "0",
-        misfire_grace_time: "600",
-        coalesce: "True",
-        max_instances: "1",
-      };
-      // console.log(data_post);
+      if (formState.switch == true) {
+        data_post = {
+          project: formState.project,
+          version: "default: the latest version",
+          spider: formState.spider,
+          action: formState.action,
+          task_id: "0",
+          trigger: "cron",
+          name: formState.name,
+          day: formState.day,
+          week: formState.week,
+          day_of_week: day_of_week,
+          hour: formState.hour,
+          minute: formState.minute,
+          second: "0",
+          start_date: "",
+          end_date: "",
+          timezone: "Asia/Shanghai",
+          jitter: "0",
+          misfire_grace_time: "600",
+          coalesce: "True",
+          max_instances: "1",
+        };
+      } else {
+        data_post = {
+          project: formState.project,
+          version: "default: the latest version",
+          spider: formState.spider,
+        };
+      }
+
+      console.log(data_post);
       check(data_post);
-      // console.log(formState['checkbox-group'])
-      // console.log("Success:", values);
-      // console.log(values);
+      openFullScreen1();
     };
 
-    const onFinishFailed = (errorInfo) => {
-      console.log("Failed:", errorInfo);
-    };
-    var getData = reactive({});
     //axios获取数据
     async function getVersionResponse(project) {
       await $axios
@@ -310,9 +347,6 @@ export default {
           }
         )
         .then(function (response) {
-          //   datas = response.data.data.list.map((item) => {
-          //     return { value: item.age, name: item.name };
-          //   });
           getData = response;
         })
         .catch(function (error) {
@@ -320,20 +354,15 @@ export default {
         });
     }
 
-    var versionInfo = reactive([]);
-
     function getVersion() {
       var response = getVersionResponse(formState.project).then(() => {
-        // versionInfo = getData.data.versions.slice(0, 1);
         for (var i = 0; i < getData.data.versions.length; i++) {
           versionInfo.push(getData.data.versions[i]);
         }
         versionInfo = [];
       });
-      // console.log(response)
     }
 
-    let spiderData = reactive({});
     async function getSpiderResponse(spider) {
       await $axios
         .post(
@@ -349,9 +378,6 @@ export default {
           }
         )
         .then(function (response) {
-          //   datas = response.data.data.list.map((item) => {
-          //     return { value: item.age, name: item.name };
-          //   });
           spiderData = response;
         })
         .catch(function (error) {
@@ -359,27 +385,17 @@ export default {
         });
     }
 
-    var spiderInfo = reactive([]);
-    var flag = reactive(true);
-
     function getSpider() {
       var response = getSpiderResponse(formState.project).then(() => {
         for (var i = 0; i < spiderData.data.spiders.length; i++) {
           spiderInfo.pop();
-          // console.log(spiderInfo)
         }
         flag = false;
         formState.spider = [];
-        // versionInfo = getData.data.versions.slice(0, 1);
         for (var i = 0; i < spiderData.data.spiders.length; i++) {
           spiderInfo.push(spiderData.data.spiders[i]);
-          // console.log(spiderInfo)
         }
-        // flag = true;
-        // console.log(spiderInfo);
-        // spiderInfo = [];
       });
-      // console.log(spiderInfo)
     }
 
     return {
@@ -394,6 +410,11 @@ export default {
       spiderInfo,
       flag,
       check,
+      message,
+      openFullScreen1,
+      ref,
+      fullscreenLoading,
+      route,
     };
   },
 };
