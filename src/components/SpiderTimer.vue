@@ -16,7 +16,7 @@ import {
 import { inject } from "vue";
 export default {
   name: "SpiderTimer",
-  props: ["datas", "test"],
+  props: ["datas"],
   setup(props) {
     let $echarts = inject("echarts");
     let $axios = inject("axios");

@@ -1,15 +1,14 @@
 <template>
-  <el-row >
+  <el-row>
     <el-col :span="5" :offset="1" class="mycard">1</el-col>
     <el-col :span="5" :offset="1" class="mycard">2</el-col>
     <el-col :span="5" :offset="1" class="mycard">3</el-col>
     <el-col :span="5" :offset="1" class="mycard">4</el-col>
-
   </el-row>
   <el-row>
     <el-col :span="7" :offset="1"
       ><div class="chart-content bg-purple">
-        <Lines myid="hh" />
+        <!-- <SpiderTimer :datas="datas" /> -->
       </div>
     </el-col>
     <el-col :span="7" :offset="1"
@@ -86,17 +85,21 @@
                   已关闭
                 </el-button>
 
-                <el-button
-                  type="warning"
-                  round
-                  size="small"
-                  :disabled="true"
-                  >{{scope.row.status}}</el-button
-                ></template
+                <el-button type="warning" round size="small" :disabled="true">{{
+                  scope.row.status
+                }}</el-button></template
               >
             </el-table-column>
           </el-table>
           <div id="change">
+            <el-button
+              class="toNew"
+              type="success"
+              round
+              size="small"
+              @click="toForm"
+              >新建任务</el-button
+            >
             <el-pagination
               background
               :page-sizes="[5, 10, 20]"
@@ -210,15 +213,18 @@ import {
 } from "vue";
 
 import Lines from "../components/Lines.vue";
-
+import SpiderTimer from "../components/SpiderTimer.vue";
+import { useRouter } from "vue-router";
 export default {
   name: "EventHandler",
   components: {
     Lines,
+    SpiderTimer,
   },
   setup() {
     let $axios = inject("axios");
     const now = new Date();
+    const route = useRouter();
     //用于获取table
     let myTable = ref(null);
     // 当前页
@@ -245,7 +251,7 @@ export default {
     let myPages = ref();
     let myItems = ref();
     let myProject = ref();
-
+    let datas = reactive();
     onBeforeMount(() => {
       getData().then(() => {
         setFirst();
@@ -253,7 +259,27 @@ export default {
       });
     });
 
-    onMounted(() => {});
+    onMounted(() => {
+      $axios
+        .post("http://localhost:5000/vpw/getCrawledCount", {
+          interval: "day",
+          dateStart: "2022-1-22",
+          dateEnd: "2022-01-27",
+        })
+        .then((response) => {
+          // console.log(response)
+          datas = response.data.data.map((item) => {
+            return item.count;
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    });
+    //实现跳转
+    const toForm = () => {
+        route.push("/form");
+    };
     //获取后端数据
     async function getData() {
       await $axios
@@ -324,40 +350,28 @@ export default {
     const stopHandle = (id, row) => {
       row.disabled = true;
       row.status = "已停止";
-      let sendPorject = row.project
-      if(sendPorject == "电影获取"){
-        sendPorject = "movieCrawler"
-      }
-      else if(sendPorject == "站点获取"){
-        sendPorject = "siteCrawler"
-      }
-      else if(sendPorject == "Html处理"){
-        sendPorject = "splashHtmlCrawler"
+      let sendPorject = row.project;
+      if (sendPorject == "电影获取") {
+        sendPorject = "movieCrawler";
+      } else if (sendPorject == "站点获取") {
+        sendPorject = "siteCrawler";
+      } else if (sendPorject == "Html处理") {
+        sendPorject = "splashHtmlCrawler";
       }
       //发送请求给后端
-      $axios.post("http://localhost:5000/apiRequestSender/query/stopSpider",
-      {
-        job:row.job,
-        project:sendPorject,
-      })
-      .then(function (response){
-        // console.log(response)
-      })
-      .catch(function (error) {
-          console.log(error);
-        });
-      $axios.post("http://localhost:5000/apiRequestSender/query/stopSpider",
-      {
-        job:row.job,
-        project:sendPorject,
-      })
-      .then(function (response){
-        // console.log(response)
-      })
-      .catch(function (error) {
-          console.log(error);
-        });
-      // setTimeout(getData(),5000)
+      for (var i = 0; i < 10; i += 1) {
+        $axios
+          .post("http://localhost:5000/apiRequestSender/query/stopSpider", {
+            job: row.job,
+            project: sendPorject,
+          })
+          .then(function (response) {
+            // console.log(response)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     };
     const deleteHandle = (id, row) => {};
 
@@ -397,18 +411,21 @@ export default {
       myRuntime,
       myFinish,
       setMyInfo,
+      datas,
+      route,
+      toForm,
     };
   },
 };
 </script>
 
-<style>
+<style scoped>
 .el-row {
   margin-bottom: 20px;
 }
-.mycard{
+.mycard {
   margin-top: 20px;
-  background-color:black;
+  background-color: black;
 }
 .el-col {
   border-radius: 4px;
@@ -458,5 +475,10 @@ export default {
 .el-pagination {
   margin-top: 10px;
   float: right;
+}
+.toNew {
+  margin-top: 10px;
+  margin-left: 10px;
+  float: left;
 }
 </style>
