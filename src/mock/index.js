@@ -15,5 +15,6 @@ const result = {
 }
 // 用mock拦截对应的请求地址，并发送返回数据对象（这里以正则来匹配带有api/的请求地址）
 const responseData = Mock.mock(/api\//, 'get', result)
+// const responseData = Mock.mock(/\//, 'get', result)
 // 导出返回对象，可以导出多个对象
 export default responseData
