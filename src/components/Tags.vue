@@ -115,7 +115,7 @@ export default {
     position: relative;
     height: 30px;
     overflow: hidden;
-    background: rgba(50,65,87);
+    background: #757575;
     padding-right: 120px;
     box-shadow: 0 0px 0px #ddd;
 }
@@ -124,6 +124,7 @@ export default {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
+    margin: 0px;
 }
 
 .tags-li {
@@ -177,7 +178,7 @@ export default {
     text-align: center;
     width: 110px;
     height: 30px;
-    background: rgba(50,65,87);
+    background: #757575;
     box-shadow: -3px 0 15px 3px rgba(0, 0, 0, 0.1);
     z-index: 10;
 }
