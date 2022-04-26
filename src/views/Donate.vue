@@ -1,11 +1,12 @@
 <template>
-  <scoll-website class="website" />
+  <scoll-example class="website" />
 </template>
 
 <script>
 import ScollWebsite from "../components/ScollWebsite.vue";
+import ScollExample from "../components/ScollExample.vue"
 export default {
-  components: { ScollWebsite },
+  components: { ScollWebsite, ScollExample},
 
   setup() {},
 };
@@ -13,7 +14,7 @@ export default {
 
 <style>
 .website {
-  height: 500px;
+  height: 110%;
   border-radius: 5px;
   /* background-color: #020f2e; */
   margin: 6px;
