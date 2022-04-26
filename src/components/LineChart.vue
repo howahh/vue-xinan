@@ -146,7 +146,7 @@ export default {
     }
     //获取并更新图表数据
     function update() {
-      console.log(props);
+      // console.log(props);
       getdata().then(() => {
         let dataOption = {
           series: [

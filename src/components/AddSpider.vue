@@ -223,7 +223,7 @@ export default {
         fullscreenLoading.value = false;
         message();
         route.push("/EventHandler");
-      }, 3000);
+      }, 5000);
     }
 
     const message = () => {

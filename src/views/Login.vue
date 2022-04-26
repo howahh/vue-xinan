@@ -82,7 +82,7 @@ export default {
             console.log(response)
             ElMessage.success(response.data.msg);
             localStorage.setItem("ms_username", param.email);
-            router.push("/");
+            router.push("/shouye");
           } else if (response.data.status == 203) {
             ElMessage.warning(response.data.msg);
             router.push("/login");

@@ -1,35 +1,97 @@
 <template>
-  <el-row>
-    <el-col :span="5" :offset="1" class="mycard">1</el-col>
-    <el-col :span="5" :offset="1" class="mycard">2</el-col>
-    <el-col :span="5" :offset="1" class="mycard">3</el-col>
-    <el-col :span="5" :offset="1" class="mycard">4</el-col>
+  <el-row style="margin-top:20px">
+    <el-col :span="5" :offset="1">
+      <a-card :body-style="{ padding: '0px' }">
+        <a-row>
+          <a-col>
+            <img
+              alt="example"
+              style="width: 100px; height: 100px"
+              src="../assets/img/icon1.png"
+          /></a-col>
+          <a-col>
+            <div
+              class="grid-cont-right"
+              style="margin-top: 8%; margin-left: 50px"
+            >
+              <div class="grid-num1">{{ allNumber }}</div>
+              <div>任务总数</div>
+            </div></a-col
+          >
+        </a-row>
+      </a-card>
+    </el-col>
+    <el-col :span="5" :offset="1">
+      <a-card :body-style="{ padding: '0px' }">
+        <a-row>
+          <a-col>
+            <img
+              alt="example"
+              style="width: 100px; height: 100px"
+              src="../assets/img/icon2.png"
+          /></a-col>
+          <a-col>
+            <div
+              class="grid-cont-right"
+              style="margin-top: 7%; margin-left: 25px"
+            >
+              <div class="grid-num1">{{ runNumber }}</div>
+              <div>正在运行任务数</div>
+            </div></a-col
+          >
+        </a-row>
+      </a-card></el-col
+    >
+    <el-col :span="5" :offset="1">
+      <a-card :body-style="{ padding: '0px' }">
+        <a-row>
+          <a-col>
+            <img
+              alt="example"
+              style="width: 100px; height: 100px"
+              src="../assets/img/icon4.png"
+          /></a-col>
+          <a-col>
+            <div
+              class="grid-cont-right"
+              style="margin-top: 7%; margin-left: 20px"
+            >
+              <div class="grid-num1">{{ siteNumber }}</div>
+              <div>电影网站数量</div>
+            </div></a-col
+          >
+        </a-row>
+      </a-card></el-col
+    >
+    <el-col :span="5" :offset="1">
+      <a-card :body-style="{ padding: '0px' }">
+        <a-row>
+          <a-col>
+            <img
+              alt="example"
+              style="width: 100px; height: 100px"
+              src="../assets/img/icon3.png"
+          /></a-col>
+          <a-col>
+            <div
+              class="grid-cont-right"
+              style="margin-top: 7%; margin-left: 25px"
+            >
+              <div class="grid-num1">{{ 456785 }}</div>
+              <div>已经获得电影数量</div>
+            </div></a-col
+          >
+        </a-row>
+      </a-card></el-col
+    >
   </el-row>
   <el-row>
-    <el-col :span="7" :offset="1"
-      ><div class="chart-content bg-purple">
-        <!-- <SpiderTimer :datas="datas" /> -->
-      </div>
+    <el-col :span="11" :offset="1" class="bg-purple">
+      <SpiderTimer :datas="datas" myid="test1" />
     </el-col>
-    <el-col :span="7" :offset="1"
-      ><div class="chart-content bg-purple">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              Card name
-              <el-button class="button" type="text">Operation button</el-button>
-            </div>
-          </template>
-          <div v-for="o in 8" :key="o" class="text item">
-            {{ "List item " + o }}
-          </div>
-        </el-card>
-      </div></el-col
-    >
-    <el-col :span="7" :offset="1">
-      <div class="chart-content bg-purple">
-        <Lines myid="1hh" />
-      </div>
+
+    <el-col :span="11" :offset="1" class="bg-purple">
+      <SpiderTimer :datas="datas" myid="test2" />
     </el-col>
   </el-row>
   <el-row :gutter="10">
@@ -251,7 +313,9 @@ export default {
     let myPages = ref();
     let myItems = ref();
     let myProject = ref();
-    let datas = reactive();
+    let allNumber = ref();
+    let runNumber = ref(0);
+    let siteNumber = ref(0);
     onBeforeMount(() => {
       getData().then(() => {
         setFirst();
@@ -259,26 +323,12 @@ export default {
       });
     });
 
-    onMounted(() => {
-      $axios
-        .post("http://localhost:5000/vpw/getCrawledCount", {
-          interval: "day",
-          dateStart: "2022-1-22",
-          dateEnd: "2022-01-27",
-        })
-        .then((response) => {
-          // console.log(response)
-          datas = response.data.data.map((item) => {
-            return item.count;
-          });
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    });
+    onMounted(() => {});
+    //获取图表数据
+
     //实现跳转
     const toForm = () => {
-        route.push("/form");
+      route.push("/form");
     };
     //获取后端数据
     async function getData() {
@@ -289,6 +339,7 @@ export default {
             if (response.data[key].status == 2) {
               response.data[key].status = "已停止";
             } else if (response.data[key].status == 1) {
+              runNumber.value = runNumber.value + 1;
               response.data[key].status = "正在运行";
             }
             if (response.data[key].project == "movieCrawler") {
@@ -308,9 +359,19 @@ export default {
             );
           });
           // console.log(newData);
+          allNumber.value = newData[0].id;
         })
         .catch(function (error) {
           console.log(error);
+        });
+
+      $axios
+        .post("http://localhost:5000/site/getSiteCount", {
+          siteType: "all",
+        })
+        .then((response) => {
+          console.log("diany", response);
+          siteNumber.value = response.data.data;
         });
     }
     //改变当前在那一页
@@ -358,6 +419,8 @@ export default {
       } else if (sendPorject == "Html处理") {
         sendPorject = "splashHtmlCrawler";
       }
+      runNumber.value -= 1;
+      myStatus.value = "已停止";
       //发送请求给后端
       for (var i = 0; i < 10; i += 1) {
         $axios
@@ -411,29 +474,36 @@ export default {
       myRuntime,
       myFinish,
       setMyInfo,
-      datas,
       route,
       toForm,
+      allNumber,
+      runNumber,
+      siteNumber,
     };
   },
 };
 </script>
 
 <style scoped>
+.testcard {
+  left: 50px;
+}
 .el-row {
   margin-bottom: 20px;
 }
 .mycard {
   margin-top: 20px;
-  background-color: black;
+  /* max-height: 100px; */
+  /* background-color: black; */
 }
 .el-col {
   border-radius: 4px;
+  /* height: 260px; */
 }
 .chart-content {
   border-radius: 4px;
   height: 260px;
-  left: 2px;
+  /* left: 2px; */
 }
 .bg-purple {
   background-color: #fff;
@@ -480,5 +550,61 @@ export default {
   margin-top: 10px;
   margin-left: 10px;
   float: left;
+}
+.grid-content {
+  display: flex;
+  align-items: center;
+  max-height: 100px;
+  background-color: #fff;
+}
+.grid-con-icon {
+  font-size: 50px;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  line-height: 100px;
+  color: #fff;
+}
+
+.grid-con-1 .grid-con-icon {
+  background: #663366;
+}
+
+.grid-num1 {
+  color: #663366;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.grid-con-2 .grid-con-icon {
+  background: #666666;
+}
+
+.grid-con-2 .grid-num {
+  color: #666666;
+}
+
+.grid-con-3 .grid-con-icon {
+  background: #333366;
+}
+
+.grid-con-3 .grid-num {
+  color: #333366;
+}
+.grid-con-4 .grid-con-icon {
+  background: #003300;
+}
+
+.grid-con-4 .grid-num {
+  color: #003300;
+}
+.grid-cont-right {
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+}
+.grid-num {
+  font-size: 30px;
+  font-weight: bold;
 }
 </style>

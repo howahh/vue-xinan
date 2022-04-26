@@ -1,5 +1,5 @@
 <template>
-  <div id="spider-timer" class="timer-holder"></div>
+  <div :id="myid" class="spider-timer"></div>
 </template>
 
 <script>
@@ -14,32 +14,26 @@ import {
   nextTick,
 } from "vue";
 import { inject } from "vue";
+import { useStore } from "vuex";
+
 export default {
   name: "SpiderTimer",
-  props: ["datas"],
+  props: ["myid"],
   setup(props) {
     let $echarts = inject("echarts");
     let $axios = inject("axios");
     let mydata = reactive([]);
-    console.log(props.datas.length)
-    for (var i = 0; i < props.datas.length; i++) {
-      if (i == 0) {
-        mydata.push(props.datas[0]);
-      } else {
-        mydata.push(props.datas[i]+props.datas[i-1]);
-      }
-    }
-    console.log(mydata)
+    const store = useStore();
+    let collapse = ref(computed(() => store.state.collapse));
+    var datas = reactive([]);
+
     onMounted(() => {
       //防止渲染时未挂载，虽然不知道为什么会出这个bug
-      nextTick(() => {
-        //   initChart();
-        //   update();F
-        //   startInterval();
-        initChart();
-      });
-      //   update();
-      //   startInterval();
+
+        getChartData().then(() => {
+         initChart()
+        });
+
     });
 
     onUnmounted(() => {
@@ -48,9 +42,31 @@ export default {
     });
     let chart = reactive(null);
     let tasks = reactive(props.tasks);
-
+    async function getChartData(){
+      await $axios
+        .post("http://localhost:5000/vpw/getCrawledCount", {
+          interval: "day",
+          dateStart: "2022-1-22",
+          dateEnd: "2022-01-28",
+        })
+        .then((response) => {
+          for (var i = 0; i < response.data.data.length; i++) {
+            datas.push(response.data.data[i].count);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      for (var i = 0; i < datas.length; i++) {
+        if (i == 0) {
+          mydata.push(datas[0]);
+        } else {
+          mydata.push(datas[i] + mydata[i - 1]);
+        }
+      }
+    };
     function initChart() {
-      chart = $echarts.init(document.getElementById("spider-timer"));
+      chart = $echarts.init(document.getElementById(props.myid));
       var option = {
         tooltip: {
           trigger: "axis",
@@ -92,9 +108,7 @@ export default {
           {
             type: "value",
             name: "运行数量",
-            min: 0,
-            max: 20,
-            interval: 4,
+            // interval: 4,
             axisLabel: {
               formatter: "{value} 个",
             },
@@ -102,9 +116,7 @@ export default {
           {
             type: "value",
             name: "",
-            min: 0,
-            max: 20,
-            interval: 4,
+            // interval: 4,
             axisLabel: {
               formatter: "",
             },
@@ -116,19 +128,19 @@ export default {
             type: "bar",
             tooltip: {
               valueFormatter: function (value) {
-                return value + " ml";
+                return value + "";
               },
             },
-            data: props.datas,
+            data: datas,
           },
 
           {
             name: "运行总数",
             type: "line",
-            yAxisIndex: 1,
+            // yAxisIndex: 1,
             tooltip: {
               valueFormatter: function (value) {
-                return value + " °C";
+                return value + "";
               },
             },
             data: mydata,
@@ -141,19 +153,35 @@ export default {
         //自适应大小
         chart.resize();
       };
-      return { initChart, chart, tasks, mydata };
+      watch(
+        collapse,
+        (newValue, oldValue) => {
+          // console.log("折叠变化了", newValue, oldValue);
+          setTimeout(() => {
+            chart.resize();
+          }, 300);
+        },
+        { immediate: true }
+      );
+      return { initChart, chart, tasks, mydata, getChartData, datas};
     }
   },
 };
 </script>
 
 <style>
-.timer-holder {
-  height: 500px;
-  border-radius: 5px;
+.spider-timer {
+  /* height: 260px; */
+  /* border-radius: 5px; */
   /* background-color: #020f2e; */
-  margin: 6px;
-  width: 100%;
+  /* margin: 20px; */
+  /* width: 100%; */
+  /* border: 1px solid; */
+  /* border-color: white; */
+  height: 260px;
+  border-radius: 5px;
+  /* background-color: #0d265e; */
+  min-width: 100%;
   border: 1px solid;
   border-color: white;
 }
