@@ -3,10 +3,9 @@
 </template>
 
 <script>
-import ScollWebsite from "../components/ScollWebsite.vue";
 import ScollExample from "../components/ScollExample.vue"
 export default {
-  components: { ScollWebsite, ScollExample},
+  components: { ScollExample},
 
   setup() {},
 };
