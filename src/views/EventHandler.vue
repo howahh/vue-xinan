@@ -54,7 +54,7 @@
           <a-col>
             <div
               class="grid-cont-right"
-              style="margin-top: 7%; margin-left: 20px"
+              style="margin-top: 7%; margin-left: 40px"
             >
               <div class="grid-num1">{{ siteNumber }}</div>
               <div>电影网站数量</div>
