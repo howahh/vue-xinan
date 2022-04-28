@@ -81,7 +81,11 @@ export default {
           },
         ],
       },
-
+      {
+        icon: "el-icon-lx-cascades",
+        index: "/analyzejob",
+        title: "分析任务暂存",
+      },
       {
         icon: "el-icon-lx-cascades",
         index: "/table",
@@ -97,7 +101,6 @@ export default {
         index: "3",
         title: "表单相关",
         subs: [
-          
           {
             index: "/upload",
             title: "文件上传",

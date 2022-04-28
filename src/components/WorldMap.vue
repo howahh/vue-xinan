@@ -34,12 +34,11 @@ export default {
     //中文名称
     let nameMap = reactive({});
     let chart = reactive(null);
-    let testData = reactive([
-      { name: "北京", value: [116.46, 39.92, 4367] },
-      { name: "上海", value: [121.48, 31.22, 8675] },
-      { name: "广州", value: [113.23, 23.16, 187] },
-      { name: "西安", value: [108.45, 34, 3421] },
+    let lowData = reactive([
     ]);
+    let middleData = reactive([]);
+    let highData = reactive([])
+    let extraData = reactive([])
     //定时器id
     let timeId = null;
 
@@ -63,14 +62,14 @@ export default {
     async function getState() {
       mapData = await $axios.get("http://localhost:3000/map/world.json");
       nameMap = await $axios.get("http://localhost:3000/map/mapChinaName.json");
-      chinaData = await $axios.get("http://localhost:3000/map/china.json");
+      chinaData = await $axios.get("http://localhost:3000/map/USA_geo.json");
     }
 
     //初始化表格
     function initChart() {
       $echarts.registerMap("world", mapData.data);
       $echarts.registerMap("china", chinaData.data);
-      chart = $echarts.init(document.getElementById("map"),'dark');
+      chart = $echarts.init(document.getElementById("map"), "dark");
       getdata();
       let options = {
         title: {
@@ -99,9 +98,6 @@ export default {
           itemStyle: {
             areaColor: "rgb(49,114,191,0.9)",
             borderColor: "#fff",
-            // emphasis: {
-            //   focus: 'self',
-            // },
           },
         },
         legend: {
@@ -116,33 +112,16 @@ export default {
         chart.resize();
       };
       chart.on("click", async (arg) => {
-        if (arg.name == "中国") {
+        if (arg.name == "美国") {
           chart.setOption({
             geo: {
               map: "china",
-              center:[110.46, 35.92]
+              zoom: 1.6,
+              center: [-100.445882, 39.7837304],
             },
           });
         }
       });
-      // let barOption = {
-      //   xAxis: {
-      //     type: "value",
-      //   },
-      //   yAxis: {
-      //     type: "category",
-      //     data: testData.map(function (item) {
-      //       return item.name;
-      //     }),
-      //   },
-      //   series: {
-      //     type: "bar",
-      //     data: testData.map(function (item) {
-      //       return item.value[3];
-      //     }),
-      //     // universalTransition: true,
-      //   },
-      // };
       let flag = 0;
       chart.getZr().on("click", async (arg) => {
         if (!arg.target) {
@@ -150,15 +129,11 @@ export default {
             chart.setOption({
               geo: {
                 map: "world",
-                center:[10.46, 13.92]
+                zoom:1.0,
+                center: [10.46, 13.92],
               },
-              // flag=1
             });
           }
-          // else if(flag==1){
-          //   chart.setOption(barOption)
-          //   flag=0
-          // }
         }
       });
     }
@@ -171,26 +146,105 @@ export default {
             {
               type: "effectScatter",
               rippleEffect: {
-                scale: 5,
+                scale: 1,
+                brushType: "stroke",
+              },
+              symbolSize:6,
+              itemStyle: {
+                color: "#388E3C",
+              },
+              name: "低威胁",
+              nameStyle: {
+                color: "#fff",
+              },
+              legend: {
+                show: false,
+              },
+              label: {
+                show: true,
+                color: "#fff",
+                offset: [20, 20],
+                formatter: "{b}",
+              },
+              data: lowData,
+              coordinateSystem: "geo",
+            },
+            {
+              type: "effectScatter",
+              rippleEffect: {
+                scale: 2,
+                brushType: "stroke",
+              },
+              symbolSize:6,
+              itemStyle: {
+                color: "#FFEB3B",
+              },
+              name: "中威胁",
+              nameStyle: {
+                color: "#fff",
+              },
+              legend: {
+                show: false,
+              },
+              label: {
+                show: true,
+                color: "#fff",
+                offset: [20, 20],
+                formatter: "{b}",
+              },
+              data: middleData,
+              coordinateSystem: "geo",
+            },
+                        {
+              type: "effectScatter",
+              rippleEffect: {
+                scale: 3,
                 brushType: "stroke",
               },
               itemStyle: {
-                color: "#FF6666",
+                color: "#FF5722",
               },
-              name: "威胁",
+              name: "高威胁",
               nameStyle: {
-                color:'#fff'
+                color: "#fff",
               },
               legend: {
-                show:false
+                show: false,
               },
-              label:{
-                show:true,
+              label: {
+                show: true,
                 color: "#fff",
-                offset:[20,20],
-                formatter:'{b}'
+                offset: [20, 20],
+                formatter: "{b}",
               },
-              data: testData,
+              data: highData,
+              coordinateSystem: "geo",
+            },
+            {
+              type: "effectScatter",
+              rippleEffect: {
+                scale: 7,
+                brushType: "stroke",
+              },
+              symbolSize:11,
+
+              itemStyle: {
+                color: "#D32F2F",
+              },
+              name: "超高威胁",
+              nameStyle: {
+                color: "#fff",
+              },
+              legend: {
+                show: false,
+              },
+              label: {
+                show: true,
+                color: "#fff",
+                offset: [20, 20],
+                formatter: "{b}",
+              },
+              data: extraData,
               coordinateSystem: "geo",
             },
           ],
@@ -201,11 +255,38 @@ export default {
     //axios获取数据
     async function getdata() {
       await $axios
-        .get("/api/testdata")
+        .post("http://localhost:5000/vpw/getLocAndStatus")
         .then(function (response) {
-          datas = response.data.data.list.map((item) => {
-            return item.age;
+          console.log(response);
+          //低
+          datas = response.data.data[0].map((item) => {
+            return item;
           });
+          // console.log("ts",datas)
+          for (var i in datas) {
+            lowData.push({ value: datas[i].loc });
+          }
+          //中
+          datas = response.data.data[1].map((item) => {
+            return item;
+          });
+          for (var i in datas) {
+            middleData.push({ value: datas[i].loc });
+          }
+          //高
+          datas = response.data.data[2].map((item) => {
+            return item;
+          });
+          for (var i in datas) {
+            highData.push({ value: datas[i].loc });
+          }
+          //极高
+          datas = response.data.data[3].map((item) => {
+            return item;
+          });
+          for (var i in datas) {
+            extraData.push({ value: datas[i].loc });
+          }
         })
         .catch(function (error) {
           console.log(error);
@@ -239,7 +320,10 @@ export default {
       chart,
       initChart,
       startInterval,
-      testData,
+      lowData,
+      middleData,
+      highData,
+      extraData
     };
   },
 };

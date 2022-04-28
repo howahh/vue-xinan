@@ -87,11 +87,11 @@
   </el-row>
   <el-row>
     <el-col :span="11" :offset="1" class="bg-purple">
-      <SpiderTimer :datas="datas" myid="test1" />
+      <SpiderTimer myid="test1" />
     </el-col>
 
     <el-col :span="11" :offset="1" class="bg-purple">
-      <SpiderTimer :datas="datas" myid="test2" />
+      <SpiderTimer myid="test2" />
     </el-col>
   </el-row>
   <el-row :gutter="10">
