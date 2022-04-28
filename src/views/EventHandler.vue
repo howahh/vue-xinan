@@ -54,7 +54,7 @@
           <a-col>
             <div
               class="grid-cont-right"
-              style="margin-top: 7%; margin-left: 20px"
+              style="margin-top: 7%; margin-left: 30px"
             >
               <div class="grid-num1">{{ siteNumber }}</div>
               <div>电影网站数量</div>
@@ -77,7 +77,7 @@
               class="grid-cont-right"
               style="margin-top: 7%; margin-left: 25px"
             >
-              <div class="grid-num1">{{ 456785 }}</div>
+              <div class="grid-num1">{{ 256785 }}</div>
               <div>已经获得电影数量</div>
             </div></a-col
           >
@@ -87,11 +87,11 @@
   </el-row>
   <el-row>
     <el-col :span="11" :offset="1" class="bg-purple">
-      <SpiderTimer :datas="datas" myid="test1" />
+      <SpiderTimer myid="test1" />
     </el-col>
 
     <el-col :span="11" :offset="1" class="bg-purple">
-      <SpiderTimer :datas="datas" myid="test2" />
+      <SpiderTimer myid="test2" />
     </el-col>
   </el-row>
   <el-row :gutter="10">

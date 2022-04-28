@@ -90,6 +90,10 @@ export default {
             index: "/eventstatus",
             title: "任务状态",
           },
+          {
+            index: "/analyzejob",
+            title: "分析任务暂存",
+          },
         ],
       },
       {

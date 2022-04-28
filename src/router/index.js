@@ -40,6 +40,13 @@ const routes = [
                     title: '任务状态'
                 },
                 component: () => import ( /* webpackChunkName: "shouye" */ "../views/EventStatus.vue")
+            },{
+                path: "/analyzejob",
+                name: "analyzejob",
+                meta: {
+                    title: '分析任务'
+                },
+                component: () => import ( /* webpackChunkName: "shouye" */ "../views/AnalyzeJob.vue")
             },
              {
                 path: "/table",
