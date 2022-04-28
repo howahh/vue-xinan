@@ -81,7 +81,17 @@ export default {
           },
         ],
       },
-
+      {
+        icon: "el-icon-lx-file",
+        index: "3",
+        title: "数据结果分析",
+        subs: [
+          {
+            index: "/eventstatus",
+            title: "任务状态",
+          },
+        ],
+      },
       {
         icon: "el-icon-lx-cascades",
         index: "/table",
@@ -97,7 +107,6 @@ export default {
         index: "3",
         title: "表单相关",
         subs: [
-          
           {
             index: "/upload",
             title: "文件上传",
