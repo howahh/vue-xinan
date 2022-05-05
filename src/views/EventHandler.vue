@@ -332,6 +332,7 @@ export default {
     };
     //获取后端数据
     async function getData() {
+      console.log("111")
       await $axios
         .post("http://localhost:5000/apiRequestSender/query/listJobs")
         .then((response) => {
