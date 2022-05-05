@@ -97,6 +97,17 @@ export default {
         ],
       },
       {
+        icon: "el-icon-lx-read",
+        index: "4",
+        title: "分析结果展示",
+        subs: [
+          {
+            index: "/eventresult",
+            title: "任务结果",
+          },
+        ],
+      },
+      {
         icon: "el-icon-lx-cascades",
         index: "/table",
         title: "基础表格",

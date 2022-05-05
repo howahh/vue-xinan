@@ -18,18 +18,12 @@
   <a-row style="margin-top: 25px">
     <a-col :span="24"><a-divider /></a-col>
   </a-row>
-  <a-row class="change">
-    <transition-group tag="">
-      <a-col
-        v-for="item in done"
-        :key="item"
-        class="cols list-item"
-        :span="6"
-        offset="1"
-      >
-        <done-card @func="doneClick" :TaskName="item" />
-      </a-col>
-    </transition-group>
+  <a-row>
+  <transition-group tag="">
+    <a-col v-for="item in done" :key="item" class="cols" :span="6" offset="1">
+      <done-card @func="doneClick" :TaskName="item" />
+    </a-col>
+  </transition-group>
   </a-row>
 </template>
 
@@ -86,17 +80,32 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .cols {
   margin-top: 40px;
 }
-.v-enter-active,
+
+.v-item {
+	list-style-type: none;
+	/**
+	 * 可以在v-enter-active和v-move中分别用transition过渡，也可以在item中用transition，包含了这两项
+	 * 要用all不用transform，有可能是因为splice删除效果不是transform
+	 */
+	transition: all 1s;
+}
+.v-enter-active,.v-leave-active {
+	transition: all 1s;
+}
+.v-move {
+	transition: all 1s;
+}
+.v-enter,.v-leave-to {
+	opacity:0;
+	transform: translateY(20px);
+}
 .v-leave-active {
-  transition: all 0.6s ease;
+	position:absolute;
 }
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
-}
+
 </style>
