@@ -82,9 +82,30 @@ export default {
         ],
       },
       {
-        icon: "el-icon-lx-cascades",
-        index: "/analyzejob",
-        title: "分析任务暂存",
+        icon: "el-icon-lx-file",
+        index: "3",
+        title: "数据结果分析",
+        subs: [
+          {
+            index: "/eventstatus",
+            title: "任务状态",
+          },
+          {
+            index: "/analyzejob",
+            title: "分析任务暂存",
+          },
+        ],
+      },
+      {
+        icon: "el-icon-lx-read",
+        index: "4",
+        title: "分析结果展示",
+        subs: [
+          {
+            index: "/eventresult",
+            title: "任务结果",
+          },
+        ],
       },
       {
         icon: "el-icon-lx-cascades",
