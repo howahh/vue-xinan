@@ -20,7 +20,7 @@
     </a-row>
 
     <a-row style="margin-top: 10px; margin-bottom: 10px; margin-left: 40px">
-      <a-button style="background-color: rgb(127, 255, 170, 0.3); margin-right:50px">
+      <a-button style="background-color: rgb(127, 255, 170, 0.3); margin-right:20px">
         <question-circle-outlined style="font-size: 15px" /> 查看任务
       </a-button>
       <a-button style="background-color: rgb(255,192,203, 0.3)">

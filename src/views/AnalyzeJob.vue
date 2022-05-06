@@ -78,14 +78,14 @@
 <script>
 import { reactive, ref, inject, onMounted, onBeforeMount } from "vue";
 import { ElNotification } from "element-plus";
-import { useRouter } from "vue-router";
+import { useRouter,useRoute } from "vue-router";
 
 export default {
   name: "AnalyzeJob",
   // props: {}
   setup() {
-    const route = useRouter();
-
+    const router = useRouter();
+    const route = useRoute();
     let $axios = inject("axios");
     //列配置
     let columns = [
@@ -129,12 +129,13 @@ export default {
       pageSize.value = newPageSize;
     }
     onBeforeMount(() => {
-      getData();
+      let name=route.query.name
+      getData(name);
     });
-    async function getData() {
+    async function getData(name) {
       await $axios
         .post("http://localhost:5000/site/getSiteByJobDate", {
-          param: "2022-05-01",
+          param: name,
         })
         .then((response) => {
           console.log(response);
@@ -176,7 +177,7 @@ export default {
       setTimeout(() => {
         fullscreenLoading.value = false;
         message();
-        route.push("/EventHandler");
+        router.push("/eventstatus");
       }, 1000);
     }
 
@@ -203,6 +204,7 @@ export default {
       openFullScreen1,
       message,
       fullscreenLoading,
+      router,
       route,
     };
   },

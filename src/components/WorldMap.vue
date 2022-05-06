@@ -33,7 +33,7 @@ export default {
     let chinaData = reactive({});
     //中文名称
     let nameMap = reactive({});
-    let chart = reactive(null);
+    let chart = reactive();
     let lowData = reactive([
     ]);
     let middleData = reactive([]);
