@@ -56,11 +56,11 @@ import { useRoute } from "vue-router";
 export default {
   setup() {
     const items = [
-      {
-        icon: "el-icon-lx-home",
-        index: "/dashboard",
-        title: "系统首页",
-      },
+      // {
+      //   icon: "el-icon-lx-home",
+      //   index: "/dashboard",
+      //   title: "系统首页",
+      // },
       {
         icon: "el-icon-lx-home",
         index: "/shouye",
@@ -84,34 +84,34 @@ export default {
       {
         icon: "el-icon-lx-file",
         index: "3",
-        title: "数据结果分析",
-        subs: [
-          {
-            index: "/eventstatus",
-            title: "任务状态",
-          },
-          {
-            index: "/analyzejob",
-            title: "分析任务暂存",
-          },
-        ],
-      },
-      {
-        icon: "el-icon-lx-read",
-        index: "4",
-        title: "分析结果展示",
+        title: "数据分析任务",
         subs: [
           {
             index: "/eventresult",
             title: "任务结果",
           },
+          {
+            index: "/eventstatus",
+            title: "任务状态",
+          },
         ],
       },
-      {
-        icon: "el-icon-lx-cascades",
-        index: "/table",
-        title: "基础表格",
-      },
+      // {
+      //   icon: "el-icon-lx-read",
+      //   index: "4",
+      //   title: "分析结果展示",
+      //   subs: [
+      //     {
+      //       index: "/eventresult",
+      //       title: "任务结果",
+      //     },
+      //   ],
+      // },
+      // {
+      //   icon: "el-icon-lx-cascades",
+      //   index: "/table",
+      //   title: "基础表格",
+      // },
       {
         icon: "el-icon-lx-copy",
         index: "/tabs",

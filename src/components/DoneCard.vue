@@ -24,9 +24,9 @@
       <!-- <a-divider /> -->
     </a-row>
 
-    <a-row style="margin-top: 10px; margin-bottom: 10px; margin-left: 40px">
+    <a-row style="margin-top: 10px; margin-bottom: 10px; margin-left: 20px">
       <a-button
-        style="background-color: rgb(240, 230, 140, 0.3); margin-right: 50px"
+        style="background-color: rgb(240, 230, 140, 0.3); margin-right: 12%"
         @click="deleteTimer(), $emit('func', { name })"
       >
         <delete-outlined style="font-size: 15px" /> 删除任务

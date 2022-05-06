@@ -1,5 +1,5 @@
 <template>
-  <el-row style="margin-top:20px">
+  <el-row style="margin-top: 20px">
     <el-col :span="5" :offset="1">
       <a-card :body-style="{ padding: '0px' }">
         <a-row>
@@ -77,8 +77,8 @@
               class="grid-cont-right"
               style="margin-top: 7%; margin-left: 25px"
             >
-              <div class="grid-num1">{{ 256785 }}</div>
-              <div>已经获得电影数量</div>
+              <div class="grid-num1">{{ movieNumber }}</div>
+              <div>电影详情页数量</div>
             </div></a-col
           >
         </a-row>
@@ -147,9 +147,24 @@
                   已关闭
                 </el-button>
 
-                <el-button type="warning" round size="small" :disabled="true">{{
-                  scope.row.status
-                }}</el-button></template
+                <el-button
+                  v-if="scope.row.status === '已停止'"
+                  type="success"
+                  round
+                  size="small"
+                  :disabled="false"
+                  @click="toAnalyse(scope.row.create_time)"
+                  >分析任务</el-button
+                >
+                <el-button
+                  v-if="scope.row.status === '正在运行'"
+                  type="warning"
+                  round
+                  size="small"
+                  :disabled="true"
+                  >{{ scope.row.status }}</el-button
+                >
+                </template
               >
             </el-table-column>
           </el-table>
@@ -286,7 +301,8 @@ export default {
   setup() {
     let $axios = inject("axios");
     const now = new Date();
-    const route = useRouter();
+    const router = useRouter();
+
     //用于获取table
     let myTable = ref(null);
     // 当前页
@@ -313,9 +329,10 @@ export default {
     let myPages = ref();
     let myItems = ref();
     let myProject = ref();
-    let allNumber = ref();
+    let allNumber = ref(0);
     let runNumber = ref(0);
     let siteNumber = ref(0);
+    let movieNumber = ref(0);
     onBeforeMount(() => {
       getData().then(() => {
         setFirst();
@@ -328,10 +345,22 @@ export default {
 
     //实现跳转
     const toForm = () => {
-      route.push("/form");
+      router.push("/form");
     };
+    const toAnalyse = (time)=>{
+      var name = time.substring(0,10)
+      router.push({
+        path:'/analyzejob',
+        query: {
+          name:name
+        }
+      })
+
+      
+    }
     //获取后端数据
     async function getData() {
+      console.log("111");
       await $axios
         .post("http://localhost:5000/apiRequestSender/query/listJobs")
         .then((response) => {
@@ -372,6 +401,12 @@ export default {
         .then((response) => {
           console.log("diany", response);
           siteNumber.value = response.data.data;
+        });
+      $axios
+        .post("http://localhost:5000/movie/getUniversalCount")
+        .then((response) => {
+          console.log("movie", response);
+          movieNumber.value = response.data.data.count;
         });
     }
     //改变当前在那一页
@@ -474,11 +509,13 @@ export default {
       myRuntime,
       myFinish,
       setMyInfo,
-      route,
+      router,
       toForm,
       allNumber,
       runNumber,
       siteNumber,
+      movieNumber,
+      toAnalyse,
     };
   },
 };
