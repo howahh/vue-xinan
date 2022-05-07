@@ -13,7 +13,8 @@
       </el-col>
       <!-- 右边两列 -->
       <el-col :span="6">
-        <Pie myid="test3" />
+        <!-- <Pie myid="test3" /> -->
+        <dash-words/>
         <Lines myid="test4" />
       </el-col>
       <!-- 下面的一行 -->
@@ -32,6 +33,7 @@ import Map from "../components/WorldMap.vue";
 import Pie from "../components/Pie.vue";
 import Circle from "../components/Circle.vue";
 import Lines from "../components/Lines.vue";
+import DashWords from "../components/DashWords.vue"
 
 export default {
   name: "shouye",
@@ -41,6 +43,7 @@ export default {
     Pie,
     Circle,
     Lines,
+    DashWords
   },
 };
 </script>

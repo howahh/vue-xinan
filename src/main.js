@@ -6,7 +6,7 @@ import installElementPlus from './plugins/element'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import './assets/css/icon.css'
-import vueSeamlessScroll from '@zengxiaohui/vue3-seamless-scroll'
+// import vueSeamlessScroll from '@zengxiaohui/vue3-seamless-scroll'
 // 导入mock
 // require('./mock');
 import('./mock/index')
@@ -16,5 +16,4 @@ app
     .use(store)
     .use(router)
     .use(Antd)
-    .use(vueSeamlessScroll)
     .mount('#app')
