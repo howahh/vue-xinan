@@ -403,7 +403,9 @@ export default {
           siteNumber.value = response.data.data;
         });
       $axios
-        .post("http://localhost:5000/movie/getUniversalCount")
+        .post("http://localhost:5000/movie/getUniversalCount",{
+          a:'1'
+        })
         .then((response) => {
           console.log("movie", response);
           movieNumber.value = response.data.data.count;
