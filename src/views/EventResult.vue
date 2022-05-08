@@ -16,6 +16,7 @@
             :customRow="rowClick"
             :pagination="false"
             bordered
+            :loading="loading"
             :scroll="{ y: 375 }"
           />
           <div class="tableHandel" style="margin: 10px">
@@ -165,6 +166,7 @@ export default {
     let apps = reactive([]);
     var json = reactive([]);
     var url_movie = ref("");
+    let loading = ref(true);
 
     onBeforeMount(() => {
       getData();
@@ -176,7 +178,9 @@ export default {
           "background-color": record.host === theID.value ? "	#DCDCDC" : "",
         },
         onClick: (event) => {
-          url_movie.value = "http://localhost:5000/apiRequestSender/query/getScreenshot?domain=" + record.host
+          url_movie.value =
+            "http://localhost:5000/apiRequestSender/query/getScreenshot?domain=" +
+            record.host;
           flag.value = true;
           spin1.value = true;
           flag_chart.value = true;
@@ -250,6 +254,7 @@ export default {
                 apps.push(temp[j]);
               }
             }
+            loading.value = false;
           }
           //   console.log(apps);
           for (var i = 0; i < apps.length; i++) {
@@ -288,6 +293,7 @@ export default {
       flag_chart,
       json,
       url_movie,
+      loading
     };
   },
 };
@@ -314,6 +320,8 @@ export default {
     transform: translateY(-50%);
   }
 }
+
+
 </style>
 
  
