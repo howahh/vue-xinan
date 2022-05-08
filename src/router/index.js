@@ -35,6 +35,14 @@ const routes = [{
             component: () => import( /* webpackChunkName: "shouye" */ "../views/EventHandler.vue")
         },
         {
+            path: "/knowledge",
+            name: "/knowledge",
+            meta: {
+                title: '聚类溯源'
+            },
+            component: () => import( /* webpackChunkName: "shouye" */ "../views/KnowledgeGraph.vue")
+        },
+        {
             path: "/eventstatus",
             name: "eventstatus",
             meta: {

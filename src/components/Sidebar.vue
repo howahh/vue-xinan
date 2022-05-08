@@ -96,6 +96,11 @@ export default {
           },
         ],
       },
+      {
+        icon: "el-icon-lx-home",
+        index: "/knowledge",
+        title: "聚类溯源",
+      },
       // {
       //   icon: "el-icon-lx-read",
       //   index: "4",

@@ -24,10 +24,10 @@ export default {
     async function getData(){
             await $axios
             .post("http://localhost:5000/apiRequestSender/query/QASystem",{
-                param:"长津湖哪些网站有"
+                param:"春光乍泄被哪些网站侵权了"
             })
             .then(function (response){
-                console.log(response)
+                console.log('hhh',response)
                 // title = response.data.data.map(item=>{
                 //     return item.title
                 // })

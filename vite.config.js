@@ -6,4 +6,5 @@ export default {
     optimizeDeps: {
         include: ['schart.js']
     }
+    
 }
