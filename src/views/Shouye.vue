@@ -14,7 +14,7 @@
       <!-- 右边两列 -->
       <el-col :span="6">
         <!-- <Pie myid="test3" /> -->
-        <dash-words/>
+        <IndexRoll/>
         <Lines myid="test4" />
       </el-col>
       <!-- 下面的一行 -->
@@ -33,7 +33,11 @@ import Map from "../components/WorldMap.vue";
 import Pie from "../components/Pie.vue";
 import Circle from "../components/Circle.vue";
 import Lines from "../components/Lines.vue";
+<<<<<<< HEAD
+import IndexRoll from "../components/IndexRoll.vue"
+=======
 import DashWords from "../components/DashWords.vue"
+>>>>>>> 195e4ff6a8ec70b3d757a219c1dbb8ac40238934
 
 export default {
   name: "shouye",
@@ -43,7 +47,11 @@ export default {
     Pie,
     Circle,
     Lines,
+<<<<<<< HEAD
+    IndexRoll
+=======
     DashWords
+>>>>>>> 195e4ff6a8ec70b3d757a219c1dbb8ac40238934
   },
 };
 </script>

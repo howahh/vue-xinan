@@ -156,6 +156,13 @@ const routes = [{
                 title: '富文本编辑器'
             },
             component: () => import( /* webpackChunkName: "editor" */ '../views/Editor.vue')
+        }, {
+            path: '/AIQA',
+            name: 'AIQA',
+            meta: {
+                title: '智能问答模块'
+            },
+            component: () => import( /* webpackChunkName: "editor" */ '../views/AIQA.vue')
         }
     ]
 }, {

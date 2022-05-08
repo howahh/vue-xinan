@@ -1,174 +1,196 @@
 <template>
-  <a-form
-    :model="formState"
-    name="validate_other"
-    v-bind="formItemLayout"
-    @finishFailed="onFinishFailed"
-    @finish="onFinish"
-  >
-    <a-form-item
-      name="selectServer"
-      label="服务器"
-      has-feedback
-      :rules="[{ required: true, message: 'Please select your server!' }]"
+  <a-card style="margin: 20px; border-radius: 20px"
+  :hoverable="true">
+    <a-form
+      :model="formState"
+      name="validate_other"
+      v-bind="formItemLayout"
+      @finishFailed="onFinishFailed"
+      @finish="onFinish"
     >
-      <a-select
-        v-model:value="formState.selectServer"
-        placeholder="Select a server"
+      <a-form-item
+        name="selectServer"
+        label="服务器"
+        has-feedback
+        :rules="[{ required: true, message: 'Please select your server!' }]"
       >
-        <a-select-option value="localhost:6800">localhost:6800</a-select-option>
-      </a-select>
-    </a-form-item>
-
-    <a-form-item
-      name="project"
-      label="项目"
-      has-feedback
-      :rules="[{ required: true, message: 'Please select your project!' }]"
-    >
-      <a-select
-        v-model:value="formState.project"
-        placeholder="Select a project"
-        @change="getVersion(), getSpider()"
-      >
-        <a-select-option value="movieCrawler">movieCrawler</a-select-option>
-        <a-select-option value="siteCrawler">siteCrawler</a-select-option>
-        <a-select-option value="splashHtmlCrawler"
-          >splashHtmlCrawler</a-select-option
+        <a-select
+          v-model:value="formState.selectServer"
+          placeholder="Select a server"
         >
-      </a-select>
-    </a-form-item>
+          <a-select-option value="localhost:6800"
+            >localhost:6800</a-select-option
+          >
+        </a-select>
+      </a-form-item>
 
-    <a-form-item
-      name="_version"
-      label="项目版本"
-      has-feedback
-      :rules="[{ required: true, message: 'Please select your version!' }]"
-    >
-      <a-select
-        v-model:value="formState._version"
-        placeholder="Select a version"
+      <a-form-item
+        name="project"
+        label="项目"
+        has-feedback
+        :rules="[{ required: true, message: 'Please select your project!' }]"
       >
-        <a-select-option
-          v-for="version in versionInfo"
-          :key="version"
-          :value="version"
-          >{{ version }}</a-select-option
+        <a-select
+          v-model:value="formState.project"
+          placeholder="Select a project"
+          @change="getVersion(), getSpider()"
         >
-      </a-select>
-    </a-form-item>
+          <a-select-option value="movieCrawler">movieCrawler</a-select-option>
+          <a-select-option value="siteCrawler">siteCrawler</a-select-option>
+          <a-select-option value="splashHtmlCrawler"
+            >splashHtmlCrawler</a-select-option
+          >
+        </a-select>
+      </a-form-item>
 
-    <a-form-item
-      name="spider"
-      label="爬虫"
-      has-feedback
-      :rules="[{ required: true, message: 'Please select your spider!' }]"
-    >
-      <a-select
-        v-model:value="formState.spider"
-        placeholder="Select a spider"
-        clearable
+      <a-form-item
+        name="_version"
+        label="项目版本"
+        has-feedback
+        :rules="[{ required: true, message: 'Please select your version!' }]"
       >
-        <a-select-option
-          v-for="spider in spiderInfo"
-          :key="spider"
-          :value="spider"
-          >{{ spider }}</a-select-option
+        <a-select
+          v-model:value="formState._version"
+          placeholder="Select a version"
         >
-      </a-select>
-    </a-form-item>
+          <a-select-option
+            v-for="version in versionInfo"
+            :key="version"
+            :value="version"
+            >{{ version }}</a-select-option
+          >
+        </a-select>
+      </a-form-item>
 
-    <a-form-item name="switch" label="定时任务">
-      <a-switch v-model:checked="formState.switch" />
-    </a-form-item>
-
-    <a-form-item
-      v-show="formState.switch"
-      name="action"
-      label="方式"
-      has-feedback
-    >
-      <a-select v-model:value="formState.action" placeholder="Select an action">
-        <a-select-option value="add">添加任务</a-select-option>
-        <a-select-option value="add_fire">添加任务并立即执行</a-select-option>
-        <a-select-option value="add_pause">添加任务并暂停</a-select-option>
-      </a-select>
-    </a-form-item>
-
-    <a-form-item name="name" label="任务名称" v-show="formState.switch">
-      <a-input
-        v-model:value="formState.name"
-        placeholder="textual description of the task(optional)"
-      />
-    </a-form-item>
-    <a-form-item label="运行天数" v-show="formState.switch">
-      <a-input
-        v-model:value="formState.day"
-        placeholder="day (1-31); CAN BE 1st mon OR last sun OF THE MONTH"
-      />
-    </a-form-item>
-
-    <a-form-item
-      name="day_of_Week"
-      label="每周运行天数"
-      v-show="formState.switch"
-    >
-      <a-checkbox-group v-model:value="formState['checkbox-group']">
-        <a-row>
-          <a-col :span="8">
-            <a-checkbox value="*" style="line-height: 32px">*</a-checkbox>
-          </a-col>
-          <a-col :span="8">
-            <a-checkbox value="mon-fri" style="line-height: 32px"
-              >周一至周五</a-checkbox
-            >
-          </a-col>
-          <a-col :span="8">
-            <a-checkbox value="mon" style="line-height: 32px">周一</a-checkbox>
-          </a-col>
-          <a-col :span="8">
-            <a-checkbox value="tue" style="line-height: 32px">周二</a-checkbox>
-          </a-col>
-          <a-col :span="8">
-            <a-checkbox value="wed" style="line-height: 32px">周三</a-checkbox>
-          </a-col>
-          <a-col :span="8">
-            <a-checkbox value="thu" style="line-height: 32px">周四</a-checkbox>
-          </a-col>
-          <a-col :span="8">
-            <a-checkbox value="fri" style="line-height: 32px">周五</a-checkbox>
-          </a-col>
-          <a-col :span="8">
-            <a-checkbox value="sat" style="line-height: 32px">周六</a-checkbox>
-          </a-col>
-          <a-col :span="8">
-            <a-checkbox value="sun" style="line-height: 32px">周日</a-checkbox>
-          </a-col>
-        </a-row>
-      </a-checkbox-group>
-    </a-form-item>
-
-    <a-form-item name="hour" label="小时数" v-show="formState.switch">
-      <a-input
-        v-model:value="formState.hour"
-        placeholder="hour (0-23); 9,17,8-20/4 equals to 8,9,12,16,17,20"
-      />
-    </a-form-item>
-    <a-form-item name="minute" label="分钟数" v-show="formState.switch">
-      <a-input
-        v-model:value="formState.minute"
-        placeholder="minute (0-59); defaults to 0, type */10 to fire every 10 minutes"
-      />
-    </a-form-item>
-    <a-form-item :wrapper-col="{ span: 12, offset: 6 }">
-      <a-button
-        type="primary"
-        v-loading.fullscreen.lock="fullscreenLoading"
-        html-type="submit"
-        >提交</a-button
+      <a-form-item
+        name="spider"
+        label="爬虫"
+        has-feedback
+        :rules="[{ required: true, message: 'Please select your spider!' }]"
       >
-    </a-form-item>
-  </a-form>
+        <a-select
+          v-model:value="formState.spider"
+          placeholder="Select a spider"
+          clearable
+        >
+          <a-select-option
+            v-for="spider in spiderInfo"
+            :key="spider"
+            :value="spider"
+            >{{ spider }}</a-select-option
+          >
+        </a-select>
+      </a-form-item>
+
+      <a-form-item name="switch" label="定时任务">
+        <a-switch v-model:checked="formState.switch" />
+      </a-form-item>
+
+      <a-form-item
+        v-show="formState.switch"
+        name="action"
+        label="方式"
+        has-feedback
+      >
+        <a-select
+          v-model:value="formState.action"
+          placeholder="Select an action"
+        >
+          <a-select-option value="add">添加任务</a-select-option>
+          <a-select-option value="add_fire">添加任务并立即执行</a-select-option>
+          <a-select-option value="add_pause">添加任务并暂停</a-select-option>
+        </a-select>
+      </a-form-item>
+
+      <a-form-item name="name" label="任务名称" v-show="formState.switch">
+        <a-input
+          v-model:value="formState.name"
+          placeholder="textual description of the task(optional)"
+        />
+      </a-form-item>
+      <a-form-item label="运行天数" v-show="formState.switch">
+        <a-input
+          v-model:value="formState.day"
+          placeholder="day (1-31); CAN BE 1st mon OR last sun OF THE MONTH"
+        />
+      </a-form-item>
+
+      <a-form-item
+        name="day_of_Week"
+        label="每周运行天数"
+        v-show="formState.switch"
+      >
+        <a-checkbox-group v-model:value="formState['checkbox-group']">
+          <a-row>
+            <a-col :span="8">
+              <a-checkbox value="*" style="line-height: 32px">*</a-checkbox>
+            </a-col>
+            <a-col :span="8">
+              <a-checkbox value="mon-fri" style="line-height: 32px"
+                >周一至周五</a-checkbox
+              >
+            </a-col>
+            <a-col :span="8">
+              <a-checkbox value="mon" style="line-height: 32px"
+                >周一</a-checkbox
+              >
+            </a-col>
+            <a-col :span="8">
+              <a-checkbox value="tue" style="line-height: 32px"
+                >周二</a-checkbox
+              >
+            </a-col>
+            <a-col :span="8">
+              <a-checkbox value="wed" style="line-height: 32px"
+                >周三</a-checkbox
+              >
+            </a-col>
+            <a-col :span="8">
+              <a-checkbox value="thu" style="line-height: 32px"
+                >周四</a-checkbox
+              >
+            </a-col>
+            <a-col :span="8">
+              <a-checkbox value="fri" style="line-height: 32px"
+                >周五</a-checkbox
+              >
+            </a-col>
+            <a-col :span="8">
+              <a-checkbox value="sat" style="line-height: 32px"
+                >周六</a-checkbox
+              >
+            </a-col>
+            <a-col :span="8">
+              <a-checkbox value="sun" style="line-height: 32px"
+                >周日</a-checkbox
+              >
+            </a-col>
+          </a-row>
+        </a-checkbox-group>
+      </a-form-item>
+
+      <a-form-item name="hour" label="小时数" v-show="formState.switch">
+        <a-input
+          v-model:value="formState.hour"
+          placeholder="hour (0-23); 9,17,8-20/4 equals to 8,9,12,16,17,20"
+        />
+      </a-form-item>
+      <a-form-item name="minute" label="分钟数" v-show="formState.switch">
+        <a-input
+          v-model:value="formState.minute"
+          placeholder="minute (0-59); defaults to 0, type */10 to fire every 10 minutes"
+        />
+      </a-form-item>
+      <a-form-item :wrapper-col="{ span: 12, offset: 6 }">
+        <a-button
+          type="primary"
+          v-loading.fullscreen.lock="fullscreenLoading"
+          html-type="submit"
+          >提交</a-button
+        >
+      </a-form-item>
+    </a-form>
+  </a-card>
 </template>
 
 

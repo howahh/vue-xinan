@@ -31,7 +31,7 @@
       >
         <delete-outlined style="font-size: 15px" /> 删除任务
       </a-button>
-      <a-button style="background-color: rgb(135, 206, 250, 0.3)">
+      <a-button style="background-color: rgb(135, 206, 250, 0.3)" @click="routeTo()">
         <bar-chart-outlined style="font-size: 15px" /> 查看结果
       </a-button>
     </a-row>
@@ -47,6 +47,7 @@ import {
   BarChartOutlined,
 } from "@ant-design/icons-vue";
 import { reactive, inject,ref } from "vue";
+import {useRouter} from "vue-router";
 export default {
   name: "DoneCard",
   components: {
@@ -62,6 +63,7 @@ export default {
     let name = props.TaskName;
     var $axios = inject("axios");
     var flag = ref(true);
+    const route = useRouter();
     function deleteTimer(){
         $axios.post("http://localhost:5000/apiRequestSender/query/deleteTimer",{
             name: name,
@@ -69,7 +71,10 @@ export default {
             console.log(response);
         })
     }
-    return { name, deleteTimer, flag };
+    function routeTo(){
+        route.push('/eventresult')
+    }
+    return { name, deleteTimer, flag, routeTo };
   },
 };
 </script>
