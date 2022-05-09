@@ -1,12 +1,15 @@
 <template>
   <div class="place-holder">
     <div style="height:50px; color:white">
-        这里加个标题？
+        <h3 style="color:white; padding:15px; font-weight: bolder">▎实时爬取任务</h3>
     </div>
     <div class="scoll-container">
       <div class="scoll">
         <div v-for="item in title" :key="item">
-          <div style="color: white">{{ item }}</div>
+          <div style="color: white">
+            {{ item }}
+            <hr align=center width=300 color=#987cb9 SIZE=1/>
+          </div>
         </div>
       </div>
     </div>

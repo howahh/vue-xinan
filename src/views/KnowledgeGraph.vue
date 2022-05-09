@@ -1,13 +1,18 @@
 <template>
-  <iframe style="width: 100%; height: 800px" :src="url"></iframe>
+  <iframe style="width: 100%; height: 800px" src="http://localhost:7474/"></iframe>
 </template>
 
 <script>
-import { reactive } from "@vue/reactivity";
+import { reactive,ref } from "@vue/reactivity";
+import { inject } from "vue";
 
 export default {
   setup() {
-    let url = reactive("/api2/http://localhost:7474/browser/");
+    // let url = reactive("api/browser");
+    let $axios = inject("axios");
+
+    let url = ref("http://localhost:7474/");
+    console.log(url)
     return { url };
     // const https = require("https");
     // const querystring = require("querystring");

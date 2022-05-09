@@ -4,8 +4,9 @@
       <!-- 左侧两个 -->
       <el-col :span="6">
         <!-- 系统运行状态 -->
-        <LineChart myid="test1" mytype='line' />
         <Circle myid="test2" />
+        <LineChart myid="test1" mytype='line' />
+        
       </el-col>
       <!-- 地图 -->
       <el-col :span="12">
@@ -33,11 +34,8 @@ import Map from "../components/WorldMap.vue";
 import Pie from "../components/Pie.vue";
 import Circle from "../components/Circle.vue";
 import Lines from "../components/Lines.vue";
-<<<<<<< HEAD
 import IndexRoll from "../components/IndexRoll.vue"
-=======
 import DashWords from "../components/DashWords.vue"
->>>>>>> 195e4ff6a8ec70b3d757a219c1dbb8ac40238934
 
 export default {
   name: "shouye",
@@ -47,11 +45,8 @@ export default {
     Pie,
     Circle,
     Lines,
-<<<<<<< HEAD
-    IndexRoll
-=======
+    IndexRoll,
     DashWords
->>>>>>> 195e4ff6a8ec70b3d757a219c1dbb8ac40238934
   },
 };
 </script>
@@ -68,7 +63,7 @@ export default {
   margin: 0px;
 }
 .all {
-  background-image: url("../assets/img/logoin.jpg");
+  background-image: url("../assets/img/logpin.jpg");
   background-size: 100% 100%;
 }
 </style>

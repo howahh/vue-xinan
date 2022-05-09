@@ -26,7 +26,15 @@ export default {
     let $echarts = inject("echarts");
     let $axios = inject("axios");
     //reactive化
-    let datas = reactive([]);
+    let datas = reactive([
+      {value:52,name:"爬虫1"},
+      {value:27,name:"爬虫2"},
+      {value:100,name:"爬虫3"},
+      {value:33,name:"检测1"},
+      {value:100,name:"检测2"},
+      {value:100,name:"检测3"},
+      
+    ]);
     let chart = reactive(null);
     //定时器id
     let timeId = null;
@@ -39,7 +47,7 @@ export default {
       // });
       initChart();
       update();
-      startInterval();
+      // startInterval();
     });
 
     onUnmounted(() => {
@@ -64,7 +72,7 @@ export default {
       chart.setOption({
         //标题配置
         title: {
-          text: "▎网页分类",
+          text: "▎任务运行情况",
           left: 10,
           top: 10,
           textStyle: {
@@ -186,7 +194,7 @@ export default {
             },
             data: [
               {
-                name: item.name + "\n\n" + item.value,
+                name: item.name + "\n\n" + item.value+"%",
                 value: item.value,
                 itemStyle: {
                   color: new $echarts.graphic.LinearGradient(0, 1, 0, 0, [
@@ -210,6 +218,7 @@ export default {
             ],
           };
         });
+        console.log("123",seriesData)
         // console.log(seriesData)
         let dataOption = {
           series: seriesData,
@@ -222,9 +231,10 @@ export default {
       await $axios
         .get("/api/testdata")
         .then(function (response) {
-          datas = response.data.data.list.map((item) => {
-            return { value: item.age, name: item.name };
-          });
+          // data = response.data.data.list.map((item) => {
+          //   return { value: item.age, name: item.name };
+          // });
+          console.log(datas)
         })
         .catch(function (error) {
           console.log(error);
@@ -265,7 +275,6 @@ export default {
   margin: 6px;
   width: 100%;
   border: 1px solid;
-  border-color:white;
-
+  border-color: white;
 }
 </style>

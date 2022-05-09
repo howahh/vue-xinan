@@ -181,7 +181,7 @@ export default {
         .then((response) => {
           // console.log(response)
           datas = response.data.data.map((item) =>{
-            return item.count
+            return item.count*18
           })
         })
         .catch(function (error) {

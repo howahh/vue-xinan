@@ -60,7 +60,7 @@ export default {
 
     function getData() {
       $axios
-        .post("http://localhost:5000/apiRequestSender/query/getTimerRemain")
+        .post("http://localhost:5000/apiRequestSender/query/getTimerRemain",{a:1})
         .then(function (response) {
           console.log(response.data.data);
           for (var i = 0; i < response.data.data.length; i++) {
